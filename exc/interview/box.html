@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Box</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+        .div {
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #sec {
+                background: #f00;
+                overflow: auto;
+                /* overflow: hidden; */
+            }
+            .child {
+                height: 100px;
+                margin-top: 50px;
+                background: yellow;
+            }
+
+            .layout>.left {
+                width: 100px;
+                height: 100px;
+                float: left;
+                background: pink;
+            }
+            .layout>.right {
+                height: 110px;
+                background: lightgreen;
+                /* 创建了一个 BFC */
+                overflow: auto;
+            }
+    </style>
+</head>
+<body>
+    <section id="sec">
+        <article class="child"></article>
+    </section>
+    <div class="div"></div>
+    <hr>
+    <div class="layout">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>散列</title>
+</head>
+<body>
+    <script type="text/javascript">
+        class HashTable {
+            constructor() {
+                // 设定散列表，设定数组长度为质数防止碰撞
+                this.table = new Array(137);
+                this.simpleHash = this.simpleHash.bind(this);
+                this.showDistro = this.showDistro.bind(this);
+                this.put = this.put.bind(this);
+                this.get = this.get.bind(this);
+            }
+            // 计算键的散列函数,除留余数法
+            simpleHash(data) {
+                var total = 0;
+                for (var i=0;i<data.length;i++) {
+                    total+=data.charCodeAt(i);
+                }
+                console.log(this.table);
+                return (total % this.table.length);
+            }
+
+            put(data) {
+                var pos = this.simpleHash(data);// 找到位置
+                this.table[pos] = data;
+            }
+
+            get(key) {
+                return this.table[this.simpleHash(data)];
+            }
+
+            // 辅助函数，通过循环遍历散列表得出他们的键和值
+            showDistro() {
+                var n = 0;
+                for(var i=0;i<this.table.length;i++) {
+                    if(this.table[i] !== 'undefined') {
+                        console.log("键值是：" + i + "值是：" + this.table[i]);
+                    }
+                }
+            }
+        }
+
+            
+
+        /*----------代码实现-------------*/
+        var hTable = new HashTable();
+        hTable.put('China');
+        hTable.put('Japan');
+        hTable.put('America');
+        hTable.put('Tyland');
+        hTable.put('75654');
+        hTable.put('37541');
+        hTable.put('69875');
+        hTable.put('32140');
+        hTable.showDistro();
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Object.keys方法</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: rgb(36, 36, 36);
+        }
+        .page {
+            width: 960px;
+            background: rgb(224, 224, 224);
+            margin: 0 auto;
+            padding: 20px;
+            color: rgb(70, 70, 70);
+        }
+        .blue {
+            color: blue;
+        }
+    </style>
+
+    <div class="page">
+        <h1>Object.keys</h1>
+        <p>
+            Object.keys() 方法会返回一个由一个给定对象的自身可枚举属性组成的数组，数组中属性名的排列顺序和使用
+            for...in 循环遍历该对象时返回的顺序一致 （两者的主要区别是 一个 for-in 循环还会枚举其原型链上的属性）。
+        </p>
+        <hr>
+
+        <h1>Array.prototype.sort</h1>
+        <p>
+            语法：<br>
+            array.sort();<br>
+            array.sort(compareFunction);<br>
+            可选。用来指定按某种顺序进行排列的函数。如果省略，元素按照转换为的字符串的诸个字符的Unicode位点进行排序。
+        </p>
+        <p>
+            注意：<br>
+            sort() 方法在适当的位置对数组的元素进行排序，并返回数组。 sort 排序不一定是稳定的。
+            默认排序顺序是根据字符串Unicode码点。
+        </p>
+        <p>
+            如果没有指明 compareFunction ，那么元素会按照转换为的字符串的诸个字符的Unicode位点进行排序。
+            例如 "Banana" 会被排列到 "cherry" 之前。数字比大小时，9 出现在 80 之前，但这里比较时数字会先被转换为字符串，
+            所以 "80" 比 "9" 要靠前。
+        </p>
+        <hr>
+
+        <h1>for in</h1>
+        <p>
+            for...in语句以任意顺序遍历一个对象的<span class="blue">可枚举属性</span>。对于每个不同的属性，语句都会被执行。
+        </p>
+        <hr>
+
+        <h1>in</h1>
+        <p></p>
+        <hr>
+    </div>
+
+    <script type="text/javascript">
+        var obj = {
+            name: 'Alan',
+            age: '18',
+            sex: 'man',
+            height: 180,
+            like: 'woman',
+            country: 'China'
+        }
+
+        var keys = Object.keys(obj);
+        for(var i=0;i<keys.length;i+=1) {
+            console.log(keys[i]);
+        }
+        console.log('====================');
+
+
+        for (key in keys) {
+            console.log(obj[keys[key]]);
+        }
+        console.log('====================');
+
+
+        for (keys in obj) {
+            console.log(keys);
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

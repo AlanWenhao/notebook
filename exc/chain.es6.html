@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>链表es6</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        class Node {
+            constructor(ele) {
+                this.ele = ele;
+                this.next = null;
+            }
+
+        }
+
+        class List {
+            constructor() {
+                this.head = new Node("head");
+                this.find = this.find.bind(this);
+                this.insert = this.insert.bind(this);
+                this.display = this.display.bind(this);
+                this.findPrevious = this.findPrevious.bind(this);
+                this.remove = this.remove.bind(this);
+            }
+
+            find(item) {
+                var currNode = this.head;
+                while (currNode.ele !== item) {
+                    currNode = currNode.next;
+                }
+
+                return currNode;
+            }
+
+            insert(newEle, item) {
+                var newNode = new Node(newEle);
+                var currNode = this.find(item);
+                newNode.next = currNode.next;
+                currNode.next = newNode;
+            }
+
+            /**
+             * 辅助遍历方法
+             */
+            display() {
+                var currNode = this.head;
+                console.log('这是加了bind之后的this', this);
+                while (currNode.next !== null) {
+                    console.log(currNode.next.ele);
+                    currNode = currNode.next;
+                }
+            }
+
+            /**
+             * 
+             */
+            findPrevious(item) {
+                var currNode = this.head;
+                while ((currNode != null) && (currNode.next != item)) {
+                    currNode = currNode.next;
+                }
+
+                return currNode;
+            }
+
+            remove(item) {
+                var preNode = this.findPrevious(item);
+                var currNode = this.find(item);
+                if (preNode.next !== null) {
+                    preNode.next = currNode.next;
+                    currNode.next = null;
+                }
+            }
+        }
+
+
+
+        /*--------单向链表方法实现---------*/
+        var cities = new List();
+        cities.insert("first", "head");
+        cities.insert("second", "first");
+        cities.insert("third", "second");
+
+        cities.display();
+        console.log('---------------------');
+        cities.remove("second");
+        cities.display();
+
+    </script>
+</body>
+
+</html>

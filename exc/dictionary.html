@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>字典</title>
+</head>
+<body>
+    <script type="text/javascript">
+
+        function Dictionary() {
+            this.datastore = new Array();
+            this.add = add;
+            this.find = find;
+            this.remove = remove;
+            this.showAll = showAll;
+            this.count = count;
+            this.clear = clear;
+        }
+
+        function add(key, value) {
+            this.datastore[key] = value;
+        }
+
+        function find(key) {
+            return this.datastore[key];
+        }
+
+        function remove(key) {
+            delete this.datastore[key];
+        }
+
+        function count() {
+            return Object.keys(this.datastore).length;
+        }
+
+        function clear() {
+            // 便利出来依次删除即可
+            var datakeys = Object.keys(this.datastore);
+            for (var keys in datakeys) {
+                delete this.datastore[datakeys[keys]];
+            }
+        }
+
+        /**
+         * 辅助方法，打印所有数据
+         */
+        function showAll() {
+            // 依次遍历并排序
+            var datakeys = Object.keys(this.datastore).sort();
+            for(var keys in datakeys) {
+                console.log(datakeys[keys] + '====>' + this.datastore[datakeys[keys]]);
+            }
+        }
+
+        /*-------------代码实现----------------*/
+        var book = new Dictionary();
+        book.add('Adidas', 498);
+        book.add('Nike', 998);
+        book.add('NB', 598);
+        console.info('Nike价格：' + book.find('Nike'));
+        book.showAll();
+        book.remove('Nike');
+        console.log('=============');
+        book.showAll();
+        console.log('==============');
+        book.clear();
+        book.showAll();
+
+
+    </script>
+</body>
+</html>
