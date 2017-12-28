@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CSS</title>
+    <style>
+        ul, li {
+            list-style: none;
+        }
+        ul {
+            width: 300px;
+            overflow: hidden;
+        }
+        li {
+            width: 59px;
+            height: 30px;
+            float: left;
+            background: lightblue;
+            cursor: pointer;
+        }
+        li:not(:last-child) {
+            border-right: 1px solid black;
+        }
+        .svg {
+            width: 200px;
+            height: 200px;
+            background: url('logo.svg');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <div class="svg"></div>
+</body>
+</html>

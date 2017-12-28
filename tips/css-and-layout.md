@@ -15,3 +15,10 @@ input[type=text]:focus, textarea:focus {
   border: 1px solid rgba(247, 60, 60, 1);
 }
 ```
+
+### 使用 :not() 在菜单上应用/取消边框
+```
+.nav li:not(:last-child) {
+	border-right: 1px solid black;
+}
+```
