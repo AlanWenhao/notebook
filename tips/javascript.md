@@ -3,7 +3,7 @@
 - document.querySelectorAll('.class')选中所有
 
 ### 有关Javascript循环
-1. for loop  
+1. for loop
 2. for/in loop
 3. for/of loop
 4. for/await loop 
