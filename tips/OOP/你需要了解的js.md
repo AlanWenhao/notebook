@@ -1,4 +1,4 @@
-# 你需要了解的JS
+# 你需要了解的JS
 
 ## 引入
 ```js
@@ -18,14 +18,14 @@ xx();
     - 执行阶段
 
 ### 全局的时候
-1. 第一步：扫描用var创建的变量，以及 声明方式创建的函数，创建一个此法环境(LexicalEnvironment)，并将其添加至其中。
+1. 第一步：扫描用var创建的变量，以及 声明方式创建的函数，创建一个此法环境(LexicalEnvironment)，并将其添加至其中。
 > 函数创建有两种方式:声明的方式、函数表达式  
 > function test() {}  
 > var test = function() {}  
 
 以下做一个简单的比喻：
 ```js
-LexicalEnvironment
+LexicalEnvironment
 {
     a: undefined
     test: 对函数的引用
@@ -49,7 +49,7 @@ var g = function() {
     原样打印函数 f
     undefined
     ff
-    报错：'g is not a function'
+    报错：'g is not a function'
 解释：预处理阶段，函数f被添加到了此法环境中，并成功创建函数的引用，但是 g 是undefind
 ```
 看一个关于变量的简单例子：
@@ -72,21 +72,21 @@ console.log('后：', a);
 a();
 
 结果：
-   打印出函数a
+   打印出函数a
     1
-解释：
+解释：
     可以这么理解：此法环境中一个对于a的赋值是undefined，一个是函数的引用，引用优先
 
 -------------------------------------------------------
 var a = 1;
-function a() {
+function a() {
     console.log('aaa');
 }
 a(); // 报错，'a is not a function'
 
 -------------------------------------------------------
 var a = 1;
-var a = function() {
+var a = function() {
     console.log('aaa');
 }
 a();
