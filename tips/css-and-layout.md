@@ -29,3 +29,5 @@ input[type=text]:focus, textarea:focus {
 - 有节制地使用：当元素恢复到初始状态时，浏览器会丢掉之前的优化工作，如果声明 `will-change`，浏览器 会将优化保存的更久
 - 不要过早使用 `will-cahnge` 优化：其设计初衷是作为最后的优化手段，不应该用来预防性能问题。
 - 给他足够的工作时间
+
+### object-fit
