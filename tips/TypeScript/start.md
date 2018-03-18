@@ -1,10 +1,8 @@
 # [TypeScript](https://www.typescriptlang.org/) 概念
 微软开发的JsvaScript的超集，兼容JavaSctript，可以载入JS代码运行
-## 与JS的比较
-- 加入注释，让编译器理解所支持的对象和函数，编译器会移除注释，不会增加开销
-- 增加一个完整的类结构，变成传统的面向对象语言
-## 语法特性
-- 类 Classes
-- 接口 Interfaces
-- 模块 Modules
-- ……
+## 原始数据类型
+JavaScript拥有六种数据原始类型：`boolean`, `number`, `string`, `null`, `undefined` 与 ES6 新定义的 `Symbol`  
+TypeScript 拥有五种基本类型：`boolean`, `number`, `string`, `null`, `undefined`  
+另外在TypeScript中还可以使用：任意值：`any`，联合类型：`|` 分隔
+
+### 对象的类型——接口 interface
