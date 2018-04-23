@@ -69,3 +69,6 @@ import {
     age
 } from './ex';
 ```
+
+### !! 两次取反
+将一个值变为Boolean，效果与Boolean()一致
