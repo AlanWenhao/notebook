@@ -69,3 +69,44 @@ import {
     age
 } from './ex';
 ```
+
+### 由Promise引出的js任务队列
+[参考链接](https://github.com/dwqs/blog/issues/61)
+```js
+new Promise(resolve => {
+    resolve(1);
+    Promise.resolve().then(() => console.log(2));
+    console.log(4)
+}).then(t => console.log(t));
+console.log(3);
+
+// 输出 4 3 2 1
+```
+解释：任务可以分为同步任务，微异步任务，异步任务，看下题：
+
+```js
+console.log('script start');   //同步输出——1
+
+setTimeout(function() {
+  console.log('timeout1');   //异步宏任务，推入事件队列——5
+}, 10);
+
+new Promise(resolve => {
+    console.log('promise1');   //同步输出——2
+    resolve();   //同步执行 
+    setTimeout(() => console.log('timeout2'), 10);   //异步宏任务，推入事件队列——6
+}).then(function() {
+    console.log('then1')     //异步微任务， 在执行队列之后，事件队列之前执行——4
+})
+
+console.log('script end');   //同步输出——3
+
+// 程序从上到下，以此将不同性质的任务推入特定的队列
+所以输出:
+script start
+promise1
+script end
+then1
+timeout1
+timeout2
+```
