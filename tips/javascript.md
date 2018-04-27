@@ -110,3 +110,5 @@ then1
 timeout1
 timeout2
 ```
+### !! 两次取反
+将一个值变为Boolean，效果与Boolean()一致
