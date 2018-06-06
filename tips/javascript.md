@@ -112,3 +112,71 @@ timeout2
 ```
 ### !! 两次取反
 将一个值变为Boolean，效果与Boolean()一致
+
+### Set 与 Map数据结构
+Set：
+- ES6 提供了新的数据结构 Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。Set 本身是一个构造函数，用来生成 Set 数据结构。
+- 向Set加入值得时候，通过精确运算判断不同的值。即使JS中认为 null === null
+- 两个对象总是不相等的！
+
+Set的实例属性
+- `Set.prototype.constructor` 构造函数，默认是 Set 函数
+- `Set.prototype.size` 返回 Set 实例成员总数
+
+Set实例方法
+- 操作方法
+    - `add(value)` 添加某个值，返回 Set 结构本身,支持链式添加，eg: s.add(1).add(2).add(3)
+    - `delete(value)` 删除某个值，返回一个布尔值，表示删除是否成功
+    - `has(value)` 返回一个布尔值，表示是否为Set的成员
+    - `clear` 清楚所有成员，没有返回值
+    - Array.from()方法可以将Set转化为数组，eg: Array.from(new Set([1,2,3,4]))
+- 遍历方法
+    - `keys()` 返回键名的遍历器
+    - `values()` 返回键值得遍历器
+    - `entries()` 返回键值对的**遍历器**
+    - `forEach` 使用回调函数遍历每个成员
+    - **特别指出，Set的遍历顺序就是插入顺序**
+    - **由于Set结构没有键名只有键值，所以keys方法与values方法的行为完全一致**
+
+Set 遍历举例
+```js
+for (let item of set.entries()) {
+  console.log(item);
+}
+// ["red", "red"]
+// ["green", "green"]
+// ["blue", "blue"]
+
+// 由于entries方法返回遍历器，同时包含键名与键值，所以每次输出一个数组，两个成员完全西相同
+
+// 其实set默认可遍历，它的默认遍历器生成函数就是values方法
+Set.prototype[Symbol.iterator] === Set.prototype.values // true
+
+let set = new Set(['red', 'green', 'blue']);
+
+for (let x of set) {
+  console.log(x);
+}
+// red
+// green
+// blue
+```
+
+Set结合扩展运算符...之后可以使用任意的数组方法，因此，实现交集、并集、差集
+```js
+let a = new Set([1, 2, 3]);
+let b = new Set([4, 3, 2]);
+
+// 并集
+let union = new Set([...a, ...b]);
+// Set {1, 2, 3, 4}
+
+// 交集
+let intersect = new Set([...a].filter(x => b.has(x)));
+// set {2, 3}
+
+// 差集
+let difference = new Set([...a].filter(x => !b.has(x)));
+// Set {1}
+```
+
