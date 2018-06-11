@@ -43,3 +43,23 @@ input[type=text]:focus, textarea:focus {
 - 右边容器中的文字设置超出显示省略号
 - 原因：如果不设置min-width,右边的flex: 1;的元素会把左边的挤小（可以尝试调大min-width看看效果）
 
+
+### 各种居中的解决方案，首先你要有一个decision tree like：
+[参考链接 css-tricks](https://css-tricks.com/centering-in-the-unknown/)
+- 水平
+  - 是否是inline或者inline-*元素
+  - 是否是block元素
+  - 是否有不同块状元素同时需要居中
+- 垂直
+  - 是否是inline或者inline-*元素
+    - 是否是一行
+    - 是否是多行
+  - 是否是block元素
+    - 元素高度已知
+    - 元素高度未知
+    - 是否决定使用flexbox
+- both 水平 and 垂直
+  - 元素宽高固定
+  - 元素宽高未知
+  - 是否决定用flex
+  - 是否决定用grid
