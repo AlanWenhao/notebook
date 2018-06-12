@@ -7,3 +7,4 @@
     + [高性能滚动之scroll优化](http://www.cnblogs.com/coco1s/p/5499469.html)
 4. [Hugo web前端](http://www.ghugo.com/)
     + [高性能滚动](http://www.ghugo.com/gone-in-60-frames-per-second/)
+5. [React 使用不适合bind与箭头函数的地方](https://segmentfault.com/a/1190000011007769)
