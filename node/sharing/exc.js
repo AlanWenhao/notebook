@@ -1,2 +1,5 @@
-const fileA = require('./a');
-console.log(fileA);
+require('./a');
+require('./a');
+require('./a');
+
+console.log(require);

@@ -139,4 +139,44 @@ console.log(fileA);
 })()
 ```
 
+既然了解了 node 模块输入输出到底是怎么回事，name看下面这个例子
+```js
+// 文件a
+exports = 123;
+
+// 文件b
+const fileA = require('./a);
+console.log(fileA);
+```
+
+再看下面的一个问题：
+> 上面我们了解到了 node 模块化的本质，在我们以往的编码经验中，我们也知道，require()过来的代码对立即执行  
+```js
+// a文件
+console.log('这里是a文件');
+const func = () => {
+    console.log('这是a文件的函数');
+}
+module.exports = func;
+
+// b文件
+const fileA = require('./a');
+fileA();
+```
+
+那么再看下面的这个问题：
+```js
+// a文件
+console.log('这里是a文件');
+const func = () => {
+    console.log('这是a文件的函数');
+}
+module.exports = func;
+
+// b文件
+require('./a');
+require('./a');
+require('./a');
+```
+
 
