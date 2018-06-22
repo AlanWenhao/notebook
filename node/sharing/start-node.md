@@ -51,7 +51,7 @@ Node 适合处理 I/O 密集型应用，而非 CPU 密集型应用
 
 ## 全局变量
 - console
-- process 常用于设置环境变量
+- process 常用于设置环境变量
 - Buffer
 - ……
 
@@ -76,7 +76,7 @@ mac设置NODE_ENV
     - `setTimeout()` 与 `setImmediate()` 中的 `this`
     - talk is cheap, show me the code
 
-箭头函数 this 指向的是函数的父级作用域，所以在回调函数中尽量使用 `() => {}`
+箭头函数 this 指向的是函数的父级作用域，所以在回调函数中尽量使用 `() => {}`
 ```JS
 setTimeout(() => {
     console.log(this);
@@ -145,7 +145,7 @@ console.log(fileA);
 exports = 123;
 
 // 文件b
-const fileA = require('./a);
+const fileA = require('./a');
 console.log(fileA);
 ```
 
