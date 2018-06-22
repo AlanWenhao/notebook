@@ -84,7 +84,7 @@ setTimeout(() => {
 }, 0)
 ```
 
-从上面的 `arguments` 例子中，我们看到了 箭头函数的父作用域，也就是当前 node 模块是有 `arguments` 存在的。这是不是可以证明 node 模块本质就是一个闭包？(其实没有那么高深莫测哦~)
+从上面的 `arguments` 例子中，我们看到了 箭头函数的父作用域，也就是当前 node 模块是有 `arguments` 存在的。这是不是可以证明 node 模块本质就是一个闭包？(其实没有那么高深莫测哦~)
 ```JS
 // try this
 console.log(a);
