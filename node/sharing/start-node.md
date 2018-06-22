@@ -10,7 +10,7 @@
 我们经常听到node有如下优点：
 - 天生优秀的高并发处理能力
 - 非阻塞（异步、callback）
-- 强大的 I/O 处理能力
+- 强大的 I/O 处理能力
 - 模块化（CommonJs）
 
 理解以下关键词：
@@ -28,7 +28,7 @@
 ![浏览器进程](./img/browser-engin.jpg)
 
 - 浏览器是多进程的
-- 进程拥有多个线程，如上图的 UI 线程
+- 进程拥有多个线程，如上图的 UI 线程
 - UI 线程与 JS 线程是互斥的
 - 浏览器渲染引擎又叫浏览器内核
 - Chrome插件对应一个进程（第三方插件进程）
@@ -41,7 +41,7 @@
 图二：Node单线程处理web任务
 ![Node单线程](./img/node进程.jpg)
 
-可见 node 在web应用中的 I/O （读写操作、输入输出、请求响应） 操作是很高效的。
+可见 node 在web应用中的 I/O （读写操作、输入输出、请求响应） 操作是很高效的。
 Node 适合处理 I/O 密集型应用，而非 CPU 密集型应用
 
 ## node 开发三大件
@@ -55,7 +55,7 @@ Node 适合处理 I/O 密集型应用，而非 CPU 密集型应用
 - Buffer
 - ……
 
-process
+process
 ```JS
 console.log(process);
 ```
@@ -66,13 +66,13 @@ mac设置NODE_ENV
 ```
 
 ## node的模块化
-> node 的每一个文件都是一个模块，是 node 模块化的一个划分规则
+> node 的每一个文件都是一个模块，是 node 模块化的一个划分规则
 
 - 问题
     - 在 node 文件中 `console.log(this)` 输出结果是什么？
     - 如果不用 `var` 声明变量 `a`，那么这个 `a` 会在哪里？
 - 几个需要注意的地方
-    - 异步微任务，`process.nextTick()` 中的 `this`
+    - 异步微任务，`process.nextTick()` 中的 `this`
     - `setTimeout()` 与 `setImmediate()` 中的 `this`
     - talk is cheap, show me the code
 
@@ -105,7 +105,7 @@ console.log(a);
 node依赖的是 commonjs 规范
 - 一个文件就是一个模块
 - 使用 `require` 来引用，`require()` 可以写入代码逻辑，不用置顶
-- 使用 `exports`/`module.exports`
+- 使用 `exports`/`module.exports`
 
 扩展：
 - 浏览器中的模块化
@@ -150,24 +150,24 @@ console.log(fileA);
 ```
 
 再看下面的一个问题：
-> 上面我们了解到了 node 模块化的本质，在我们以往的编码经验中，我们也知道，require()过来的代码对立即执行  
+> 上面我们了解到了 node 模块化的本质，在我们以往的编码经验中，我们也知道，require()过来的代码对立即执行  
 ```js
 // a文件
-console.log('这里是a文件');
+console.log('这里是a文件');
 const func = () => {
     console.log('这是a文件的函数');
 }
 module.exports = func;
 
 // b文件
-const fileA = require('./a');
+const fileA = require('./a');
 fileA();
 ```
 
 那么再看下面的这个问题：
 ```js
 // a文件
-console.log('这里是a文件');
+console.log('这里是a文件');
 const func = () => {
     console.log('这是a文件的函数');
 }
