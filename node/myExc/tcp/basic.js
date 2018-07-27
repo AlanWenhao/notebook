@@ -1,6 +1,6 @@
 const net = require('net');
 
-// socket 套接字 会话，而http又请求响应
+// socket 套接字 会话，而http有请求响应
 // 是双工流
 const server = net.createServer();
 let port = 3000;
@@ -9,8 +9,10 @@ let port = 3000;
 server.maxConnections = 2;
 
 server.on('connection', function(socket) {
-    console.log('客户端连接了服务器');
-    socket.write('欢迎光临！');
+    socket.setEncoding('utf-8');
+    server.getConnections(function(err, count) {
+        if (!err) socket.write(`当前链接人数${count}\r\n`);
+    });
     // socket.end('慢走不送'); // 服务端主动断开连接，这时候客户端的连接也会断开
     socket.on('data', function(data) {
         console.log(data.toString());
