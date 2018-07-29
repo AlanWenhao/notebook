@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    body { padding-top: 50px; }
+    div { height: 400px; font-size: 100px; line-height: 400px; text-align: center; color: #fff;}
+    a { color: #fff; text-decoration: none; }
+    .nav {
+        display: flex;
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 50px;
+        background: rgba(0,0,0,.5);
+    }
+    .nav a {
+        flex: 1;
+        height: 50px;
+        border-left: 3px solid;
+        border-right: 3px solid;
+        /* 这里如果不设置boder的color，会与color一致 */
+        font-size: 20px;
+        line-height: 50px;
+        text-align: center;
+        color: #999;
+    }
+    </style>
+</head>
+<body>
+    <p>有一个小bug，比如，点击c，再向上滚动一点距离，再次点击c，会回到向上滚动的那个位置</p>
+    <div class="nav">
+        <a href="#a">a</a>
+        <a href="#b">b</a>
+        <a href="#c">c</a>
+        <a href="#d">d</a>
+        <a href="#e">e</a>
+        <a href="#f">f</a>
+        <a href="#g">g</a>
+    </div>
+    <div id="a" style="background: lightblue;"><a href="#a">a</a></div>
+    <div id="b" style="background: lightcoral;"><a href="#b">b</a></div>
+    <div id="c" style="background: lightgray;"><a href="#c">c</a></div>
+    <div id="d" style="background: lightgreen;"><a href="#d">d</a></div>
+    <div id="e" style="background: lightpink;"><a href="#e">e</a></div>
+    <div id="f" style="background: lightslategrey;"><a href="#f">f</a></div>
+    <div id="g" style="background: gold;"><a href="#g">g</a></div>
+    <script src="./scrollTo.js"></script>
+</body>
+</html>
