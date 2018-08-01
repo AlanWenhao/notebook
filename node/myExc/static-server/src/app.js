@@ -1,14 +1,15 @@
-const http = require('http');
-const url = require('url');
-const path = require('path');
-const util = require('util');
-const fs = require('fs');
+const fs     = require('fs');
+const url    = require('url');
+const http   = require('http');
+const path   = require('path');
+const util   = require('util');
+const zlib   = require('zlib');
+const swig   = require('swig');
+const mime   = require('mime');       // 内容类型
+const chalk  = require('chalk');      // 粉笔
 const crypto = require('crypto');
-const zlib = require('zlib');
-const mime = require('mime'); // 内容类型
-const debug = require('debug')('*'); // 根据环境变量打印输出
-const chalk = require('chalk'); // 粉笔
-const swig = require('swig');
+const debug  = require('debug')('*'); // 根据环境变量打印输出
+
 // 1、指定主机名、端口号、静态文件存放目录
 const CONFIG = require('./config');
 
@@ -65,38 +66,36 @@ class Server {
      * @param {String} localPath 当前请求地址对应文件的绝对路径
      * @param {*} stat 当前文件的状态，缓存压缩等等功能用到
      */
-    async sendFile(req, res, localPath, stat) {
+    async sendFile(req, res, localPath, statObj) {
         // 判断文件是否已经缓存，设置状态码
         // this.needCache(req, res, localPath, stat);
-        if (await this.needCache(req, res, localPath, stat)) {
+        if (await this.needCache(req, res, localPath, statObj)) {
             res.statusCode = 304;
             res.end();
             return;
         }
 
+        // 压缩，如果有压缩，就返回压缩后的 zip 流
         res.setHeader('Content-type', mime.getType(localPath) + ';charset=utf-8');
         const zip = this.compress(req, res, localPath, statObj);
+        if (zip) {
+            return fs.createReadStream(localPath).pipe(zip).pipe(res);
+        }
+
+        // 范围请求range，如果有范围请求，返回部分内容
+        if (this.range(req, res, localPath, statObj)) {
+            return;
+        }
+
         fs.createReadStream(localPath).pipe(res);
     }
 
-    /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} err 
-     */
-    sendErr(req, res, err) {
-        // 使用util的inspect方法将 obj 解析，然后在转化成字符串输出到控制台
-        debug(util.inspect(err).toString());
-        res.statusCode = 404;
-        res.end('NOT FOUND');
-    }
-
-    async needCache(req, res, localPath, stat) {
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Expires', new Date(Date.now() + 10 * 1000).toGMTString());
+    // 文件缓存
+    async needCache(req, res, localPath, statObj) {
+        res.setHeader('Cache-Control', 'max-age=1000');
+        res.setHeader('Expires', new Date(Date.now() + 1000 * 1000).toGMTString());
         const etag = await this.md5Encoding(localPath);
-        const lastModified = stat.ctime.toGMTString();
+        const lastModified = statObj.ctime.toGMTString();
 
         res.setHeader('Etag', etag);
         res.setHeader('Last-Modified', lastModified);
@@ -108,7 +107,39 @@ class Server {
         return true;
     }
 
-    
+    // 压缩文件
+    compress(req, res, localPath, statObj) {
+        const encoding = req.headers['accept-encoding'];
+        if (encoding) {
+            if (encoding.match(/\bgzip\b/)) {
+                res.setHeader('content-encoding', 'gzip');
+                return zlib.createGzip();
+            } else if (encoding.match(/\bdeflate\b/)) {
+                res.setHeader('content-encoding', 'deflate');
+                return zlib.createDeflate();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    // 范围请求
+    range(req, res, localPath, statObj) {
+        const range = req.headers['range'];
+        if (range) {
+            let [, start, end] = range.match(/(\d*)-(\d*)/);
+            start = start ? Number(start) : 0;
+            end = end ? Number(end) : statObj.size - 1;
+            res.statusCode = 206;
+            res.setHeader('Accept-Ranges', 'bytes');
+            res.setHeader('Content-Range', `bytes ${start}-${end}/${statObj.size}`);
+            fs.createReadStream(localPath, { start, end }).pipe(res);
+        } else {
+            return false;
+        }
+    }
 
     /**
      * 根据文件内容获得文件的 md5 编码
@@ -132,6 +163,19 @@ class Server {
                 reject(err);
             }
         });
+    }
+
+    /**
+     * 处理错误
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} err 
+     */
+    sendErr(req, res, err) {
+        // 使用util的inspect方法将 obj 解析，然后在转化成字符串输出到控制台
+        debug(util.inspect(err).toString());
+        res.statusCode = 404;
+        res.end('NOT FOUND');
     }
 
     /**
