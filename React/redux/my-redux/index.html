@@ -6,11 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Redux设计思想</title>
     <style>
-    #title { padding-top: 100px; text-align: center; transition: all ease-in-out .8s; }
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all linear 1s;
+    }
+    #title {
+        width: 500px;
+        padding-top: 150px;
+        padding-bottom: 150px;
+        border-radius: 40px;
+        box-shadow: 0 0 20px 0 rgba(0,0,0,.35);
+        text-align: center;
+        color: #fff;
+        background: burlywood;
+        transition: all linear 1s;
+    }
     </style>
 </head>
 <body>
-    <h1 id="title"></h1>
+    <h1 id="title">Ready...</h1>
     <script src="./redux.js"></script>
 </body>
 </html>
