@@ -3,7 +3,7 @@
 ## 什么是node
 > node不是一门语言，是基于ChromeV8引擎的 **runtime（运行时）**，是 JS 在后端运行的一个环境，且不包括 JS 全集  
 
-![node与js]./im(g/collection-of-node.jpg)
+![node与js](./img/collection-of-node.jpg)
 
 ## 为什么使用node
 
