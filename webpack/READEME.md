@@ -402,7 +402,7 @@ import jQuery from 'jquery';
 - css-loader 解析 CSS 文件后，使用 import 加载，并且返回 CSS 代码
 - less-loader 加载和转译 LESS 文件
 - sass-loader 加载和转译 SASS/SCSS 文件
-- postcss-loader 使用 PostCSS 加载和转译 CSS/SSS 文件
+- postcss-loader 使用 PostCSS 加载和转译 CSS 文件,并结合插件处理各种业务场景下的 CSS 问题
 - stylus-loader 加载和转译 Stylus 文件
 
 #### 清理和测试(Linting && Testing)
