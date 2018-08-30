@@ -1,4 +1,9 @@
-// import testImg from '../img/test.jpg';
+import imgUrl from '../img/test.jpg';
 import '../css/index.css';
-import name from './name.js';
-// alert('bundle is finished !!');
+import '../scss/main.scss';
+import '../less/main.less';
+import './name';
+
+const testImg = new Image();
+testImg.src = imgUrl;
+document.querySelector('body').appendChild(testImg);

@@ -1,3 +1,15 @@
 body {
-    background: gold;
+    margin: 0;
+    padding: 0;
+}
+.bg-img {
+    width: 600px;
+    height: 400px;
+    margin: 20px;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,.7);
+    background: url('../img/test.jpg') no-repeat center center;
+    background-size: cover;
+}
+::placeholder {
+    color: red;
 }
