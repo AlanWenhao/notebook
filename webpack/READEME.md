@@ -121,3 +121,44 @@ rules: [
 ]
 ```
 
+#### 分离css
+```
+npm install --save-dev mini-css-extract-plugin
+```
+
+```
+use: [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                publicPath: '../'
+            }
+        },
+        "css-loader"
+    ]
+```
+
+#### 支持图片
+```
+npm i file-loader url-loader -D
+```
+
+- file-loader  解析项目中url资源的引入
+- url-loader   内置 file-loader 可以压缩图片成base64
+
+```
+{
+    test:/\.(jpg|png|bmp|gif|svg|ttf|woff|woff2|eot)/,
+    use:[
+        {
+            loader:'url-loader',
+            options:{limit:4096},
+            options: {
+                outputPath: 'image'
+            }
+        }
+    ]
+}
+```
+
+
