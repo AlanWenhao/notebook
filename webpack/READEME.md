@@ -173,6 +173,8 @@ npm i html-withimg-loader -D
 }
 ```
 
+结合上面的url-loader，可以总结出一套 dev 环境的 压缩方案，prod 环境的压缩方案
+
 #### 压缩CSS和JS
 ```
 npm i uglifyjs-webpack-plugin -D
@@ -326,12 +328,42 @@ npm install eslint-loader --save-dev
 }
 ```
 
+#### 代码调试，source-map
+webpack通过配置可以自动给我们source maps文件，map文件是一种对应编译文件和源文件的方法
+
+- source-map 把映射文件生成到单独的文件，最完整最慢
+- cheap-module-source-map 在一个单独的文件中产生一个不带列映射的Map
+- eval-source-map 使用eval打包源文件模块,在同一个文件中生成完整sourcemap
+- cheap-module-eval-source-map sourcemap和打包后的JS同行显示，没有映射列
+
+[SourceMapDevToolPlugin](https://webpack.docschina.org/plugins/source-map-dev-tool-plugin/#src/components/Sidebar/Sidebar.jsx)
+
+```
+devtool:'eval-source-map'
+```
+
+
 #### 拷贝静态文件
+
+```
+npm i copy-webpack-plugin -D
+```
+
+```
+new CopyWebpackPlugin([{
+  from: path.resolve(__dirname,'src/assets'), //静态资源目录源地址
+  to:path.resolve(__dirname,'dist/assets') //目标地址，相对于output的path目录
+}])
+```
 
 #### 打包前先清空输出目录
 
 ```
-new CleanWebpackPlugin([path.resolve(__dirname,'dist')])
+npm i  clean-webpack-plugin -D
+```
+
+```
+new cleanWebpackPlugin([path.resolve(__dirname,'dist')])
 ```
 
 #### 打包第三方类库
@@ -350,23 +382,57 @@ new webpack.ProvidePlugin({
 
 3.expose-loader, 不需要任何其他的插件配合，只要将下面的代码添加到所有的loader之前
 
-```
-
-```
+这里不做说明
 
 4.externals, 如果我们想引用一个库，但是又不想让webpack打包，并且又不影响我们在程序中以CMD、AMD或者window/global全局等方式进行使用，那就可以通过配置externals
+
+参考官网
+
+#### resolve解析
+extensions
 ```
-const jQuery = require("jquery");
-import jQuery from 'jquery';
+resolve: {
+  extensions: [".js",".jsx",".json",".css"]
+},
 ```
 
+alias
+```
+const bootstrap = path.resolve(__dirname,'node_modules/_bootstrap@3.3.7@bootstrap/dist/css/bootstrap.css');
+resolve: {
+    alias:{
+        "bootstrap": bootstrap
+    }
+},
 ```
 
-```
+
+modules
+- 对于直接声明依赖名的模块（如 react ），webpack 会类似 Node.js 一样进行路径搜索，搜索 node_modules 目录
+- 这个目录就是使用 resolve.modules 字段进行配置的 默认配置
+
+mainFields
+默认情况下package.json 文件则按照文件中 main 字段的文件名来查找文件
+
+mainFiles
+当目录下没有 package.json 文件时，我们说会默认使用目录下的 index.js 这个文件，其实这个也是可以配置的
+
+
+### 优化
+- libraryTarget 和 library
+- DLL
+- HappyPack
+- Tree Shaking
+- 提取公共代码 (common-chunk-and-vendor-chunk)
+- Scope Hoisting (ModuleConcatenationPlugin)
+- 动态导入和懒加载
+- 用 HMR 提高开发效率
 
 
 ### 其他，常用loader列表
 > webpack 可以使用 loader 来预处理文件。这允许你打包除 JavaScript 之外的任何静态资源。你可以使用 Node.js 来很简单地编写自己的 loader。 awesome-loaders
+
+[传送门](https://github.com/webpack-contrib/awesome-webpack#loaders)
 
 #### 文件
 - raw-loader 加载文件原始内容（utf-8）

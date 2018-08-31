@@ -7,3 +7,5 @@ import './name';
 const testImg = new Image();
 testImg.src = imgUrl;
 document.querySelector('body').appendChild(testImg);
+
+console.log($);

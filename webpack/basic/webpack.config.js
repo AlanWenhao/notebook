@@ -1,8 +1,11 @@
+const webpack = require('webpack');
 const path = require('path');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/js/index.js',
@@ -31,7 +34,7 @@ module.exports = {
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
                 use: [{
-                    loader: miniCssExtractPlugin.loader
+                    loader: MiniCssExtractPlugin.loader
                 }, 'css-loader', 'postcss-loader']
             },
             {
@@ -39,7 +42,7 @@ module.exports = {
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
                 use: [{
-                    loader: miniCssExtractPlugin.loader,
+                    loader: MiniCssExtractPlugin.loader,
                 }, 'css-loader', 'less-loader', 'postcss-loader']
             },
             {
@@ -47,7 +50,7 @@ module.exports = {
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
                 use: [{
-                    loader: miniCssExtractPlugin.loader,
+                    loader: MiniCssExtractPlugin.loader,
                 }, 'css-loader', 'sass-loader', 'postcss-loader']
             },
             {
@@ -64,11 +67,21 @@ module.exports = {
             {
                 test: /\.html$/,
                 use: 'html-withimg-loader'
+            },
+            {
+                test: require.resolve('jquery'),
+                use: [{
+                    loader: 'expose-loader',
+                    options: 'jQuery'
+                },{
+                    loader: 'expose-loader',
+                    options: '$'
+                }]
             }
         ]
     },
     plugins: [
-        new htmlWebpackPlugin({
+        new HtmlWebpackPlugin({
             template: './src/index.html',
             filename: 'index.html',
             // hash: true,
@@ -77,10 +90,18 @@ module.exports = {
                 minify: true
             }
         }),
-        new miniCssExtractPlugin({
+        new MiniCssExtractPlugin({
             filename: 'css/[name].css'
-        })
-
+        }),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname,'src/other'), //静态资源目录源地址
+            to:path.resolve(__dirname,'dist/other') //目标地址，相对于output的path目录
+        }]),
+        // new CleanWebpackPlugin([path.resolve(__dirname,'dist')])
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //     jQuery: 'jquery'
+        // })
     ],
     optimization: {
         minimizer: [
@@ -92,5 +113,6 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist'),
         port: 8888,
         proxy: {}
-    }
+    },
+    devtool:'eval-source-map'
 }
