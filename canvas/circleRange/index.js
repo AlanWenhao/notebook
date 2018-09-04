@@ -1,6 +1,7 @@
 class Circle {
     constructor(options) {
         this.canvas = document.querySelector(options.selector);
+        this.canvas.width = document.body.clientWidth;
         this.cWidth = this.canvas.width;
         this.cHeight = this.canvas.height;
         this.ctx = this.canvas.getContext('2d');
@@ -9,7 +10,6 @@ class Circle {
         this.highScore = 0;
         this.step = Math.PI * 2 / 100; // 每一分对应的弧度
         this.isRunning = false; // 是否正在加分
-        this.stack = []; // 存放每次增加的分数，便于维护异步任务，避免同一时间发生两次绘制任务
         // window.requestAnimationFrame(this.draw);
     }
 
@@ -19,8 +19,9 @@ class Circle {
      */
     grow(newScore) {
         this.highScore += newScore; // 跟新总分
-        this.stack.push(newScore); // 更新队列
-        this.next();
+        while (!this.isRunning) {
+            this.stepDraw();
+        }
     }
 
     /**
@@ -29,24 +30,18 @@ class Circle {
     stepDraw() {
         this.isRunning = true;
         this.percent += 1;
+        // this.ctx.globalCompositeOperation = 'destination-over';
         this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
 
         this.drawCircle(this.cWidth / 2, this.cHeight / 2, 100, this.sRadian, this.percent * this.step, '#fff', 12);
+        this.drawText();
+        // this.drawPoint();
 
         if (this.percent < this.highScore) {
             window.requestAnimationFrame(this.stepDraw.bind(this));
         } else {
             this.isRunning = false;
-        }
-    }
-
-    next() {
-        if (!this.isRunning) { // 如果一次加分已经完成，进行下一次加分
-            this.stepDraw();
-        } else { // 如果一次加分没有完成，递归检测
-            setTimeout(() => {
-                this.next();
-            }, 50);
+            window.cancelAnimationFrame(this.stepDraw);
         }
     }
 
@@ -58,13 +53,43 @@ class Circle {
         this.ctx.arc(x, y, r, sRadian, eRadian + this.sRadian, false); // 顺时针，注意终点要加上起点的改变量
         this.ctx.stroke();
     }
+
+    drawText() {
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '40px PT Sans';
+        const textWidth = this.ctx.measureText(this.percent+'分').width;
+        this.ctx.fillText(this.percent + '分', this.cWidth / 2 - textWidth / 2, this.cHeight / 2 + 15);
+    }
+
+    drawPoint() {
+        // this.ctx.globalCompositeOperation = 'destination-over';
+        // this.ctx.save();
+        // this.ctx.fillStyle = '#fff';
+        // this.ctx.fillRect(this.cWidth, this.cHeight, 50, 50);
+        // this.ctx.rotate(5);
+        // this.ctx.restore();
+        // this.ctx.save();                  // 保存当前状态
+        // this.ctx.translate(this.cWidth, this.cHeight);
+        // this.ctx.fillStyle = '#FFF'       // 再次改变颜色配置
+        // this.ctx.globalAlpha = 0.5;    
+        // this.ctx.fillRect(0, 0, 90, 90);
+        // this.ctx.restore();
+    }
 }
 const circle = new Circle({
     selector: '#canvas'
 });
-circle.grow(10);
-circle.grow(40);
+
 circle.grow(10);
 
-
+circle.grow(10);
+setTimeout(() => {
+    circle.grow(10);
+}, 1500)
+setTimeout(() => {
+    circle.grow(20);
+}, 3000)
+setTimeout(() => {
+    circle.grow(25);
+}, 4500)
 
