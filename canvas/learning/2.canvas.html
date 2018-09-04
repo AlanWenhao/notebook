@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="150" height="150" style="border: 1px solid gray;"></canvas>
+    <script type="text/javascript">
+    // 创建路径的起点。
+    // 画出路径
+    // 封闭路径
+    // 通过，描边与填充来渲染图形
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        ctx.beginPath();
+        ctx.arc(75, 75, 50, 0, Math.PI*2, true);
+        ctx.moveTo(110, 70);
+        ctx.arc(75, 75, 35, 0, Math.PI, false);
+        ctx.moveTo(65, 65);
+        ctx.arc(60, 65, 5, 0, Math.PI*2, true);
+        ctx.moveTo(95,65);
+        ctx.arc(90,65,5,0,Math.PI*2,true);
+        ctx.stroke();
+    </script>
+</body>

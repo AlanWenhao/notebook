@@ -1,0 +1,63 @@
+api
+- ctx = canvas.getContext("2d")
+- 绘制矩形
+    - fillRect(x, y, width, height)
+    - strokeRect(x, y, width, height)
+    - clearRect(x, y, width, height)
+- 绘制路径
+    - beginPath()
+    - closePath()
+    - stroke()
+    - fill()
+- 移动笔触
+    - moveTo(x, y)
+- 线
+    - lineTo(x, y)
+- 圆弧
+    - arc(x, y, radius, startAngle, endAngle, anticlockwise)
+- 二次贝塞尔三次贝塞尔
+    - [传送门](http://www.xuanfengge.com/cubic-bezier-bezier-css3-animation-tools.html)
+    - quadraticCurveTo(cp1x, cp1y, x, y)
+    - bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+- 矩形
+    - rect(x, y, width, height)
+- 色彩
+    - fillStyle = color
+    - strokeStyle = color
+- 透明度
+    - globalAlpha = transparencyValue
+- 线性 Line Style
+    - [传送门](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#Line_styles)
+    - lineWidth = value
+    - lineCap = type    butt/round/square
+    - lineJoin = type   round/bevel/miter
+    - miterLimit = value
+    - getLineDash()
+    - setLineDash(segments)
+    - lineDashOffset = value
+- 渐变
+    - [传送门](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#Gradients)
+    - createLinearGradient(x1, y1, x2, y2)
+    - createRadialGradient(x1, y1, r1, x2, y2, r2)
+    - gradient.addColorStop(position, color)
+- 团图案样式 Patterns
+    - [传送门](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#Patterns)
+    - createPattern(image, type)
+- 阴影
+    - shadowOffsetX = float
+    - shadowOffsetY = float
+    - shadowBlur = float
+    - shadowColor = color
+- 绘制文本
+    - fillText(text, x, y [, maxWidth])
+    - strokeText(text, x, y [, maxWidth])
+    - font = value
+    - textAlign = value
+    - textBaseline = value
+    - direction = value
+    - measureText()
+- 绘制图片
+    - drawImage(image, x, y)
+    - drawImage(image, x, y, width, height)
+
+

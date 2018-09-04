@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="150" height="150" style="border: 1px solid gray;"></canvas>
+    <script type="text/javascript">
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        ctx.fillRect(25, 25, 100, 100);
+        ctx.clearRect(45, 45, 60, 60);
+        ctx.strokeRect(50, 50, 50, 50);
+    </script>
+</body>
+</html>
