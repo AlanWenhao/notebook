@@ -39,8 +39,27 @@ insertUser({ name: 'Dylen', age: 22 }).then(data => {
 }); */
 
 
-const user2 = new User({ name: 'Even', age: 30 });
-user2.save().then((doc) => {
-    console.log(doc);
-});
+// const user2 = new User({ name: 'Even', age: 30 });
+// user2.save().then((doc) => {
+//     console.log(doc);
+// });
 
+
+/* User.update({ name: 'Even' }, { age: 18 }, (err, result) => {
+    console.log(err);
+    console.log(result);
+}); */
+
+
+/* User.remove({ name: 'Dylen' }, (err, result) => {
+    console.log(err);
+    console.log(result);
+}); */
+
+
+User.find({ name: 'Even' }, (err, docs) => {
+    if (err) return console.log(err);
+    docs[0].remove().then((e) => {
+        console.log(e);
+    });
+});

@@ -54,7 +54,7 @@ user1.save((err, doc) => {
 
 > 所有的mongoose方法都会返回一个 `Promise`，可以不必使用回调函数
 
-### 使用方法总结
+### 以上方法总结
 ```js
 /*--------- 直接对生成的模型使用create方法新建数据 ----------*/
 const mongoose = require('mongoose');
@@ -86,3 +86,35 @@ user.save((err, doc) => { // save 方法返回 Promise，可以不使用 回调�
 });
 // user.save().then()
 ```
+
+### 更新方法 update
+`Model.update(查询条件, 更新对象, callback);`
+> update 方法默认之更新一条数据，返回 `{ n: 1, nModified: 1, ok: 1 }` 依次为更新条目、是否修改、跟新是否成功
+> 使用 `update` 方法会得到提示，意为不建议使用 `update`，建议使用 `updateOne` 和 `updateMany`
+
+`$inc` 将原来值加 n
+```js
+Model.update({ name: 'Even' }, { $inc: { age: 1 } }, () => {})
+```
+
+### 删除方法 remove
+`Model.remove(删除匹配条件, callback);` 没有匹配条件则删除所有
+
+> 默认删除所有匹配项，返回 `{ n: 1, ok: 1 }` 依次为删除条目与是否成功
+
+### 查找方法 find
+`Model.find(条件, callback(err, arr))`
+
+```js
+User.find({ name: 'Even' }, (err, docs) => {
+    if (err) return console.log(err);
+    docs[0].remove().then((result) => {
+        console.log(result);
+    });
+});
+```
+
+### 注意
+> 上面提到的 `update`, `remove` 方法模型Model与实例(数据)都有，只是模型操作的时候需要指定操作的对象，而实例可以直接调用方法，比如上面查找的例子,二者返回都可以是Promise
+
+
