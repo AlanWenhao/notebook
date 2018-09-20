@@ -5,6 +5,7 @@ const methods = require('./middlewares/methods');
 const { PORT } = require('./config');
 const indexRouter = require('./routes');
 const userRouter = require('./routes/user');
+const articleRouter = require('./routes/article');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(methods);
 
 app.use('/', indexRouter);
 app.use('/users', userRouter);
+app.use('/articles', articleRouter);
 
 app.listen(PORT, () => {
     console.log(`server is running on ${PORT}`);

@@ -5,7 +5,8 @@ const connection = require('./index');
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true },
-    password: String
+    password: String,
+    admin: { type: Boolean, default: false }
 }, { timestamps: true }); // 加时间戳
 
 UserSchema.pre('save', function(next) {
