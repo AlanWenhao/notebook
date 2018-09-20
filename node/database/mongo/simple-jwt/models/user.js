@@ -18,6 +18,11 @@ UserSchema.pre('save', function(next) {
     });
 })
 
+// 增加验证密码的方法,通过给methods增加属性，可以给实例扩展方法
+UserSchema.methods.comparePassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+}
+
 // 定义模型，如果没有第二个参数，该方法意为获取模型
 const User = connection.model('User', UserSchema);
 

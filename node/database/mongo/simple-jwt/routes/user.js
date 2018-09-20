@@ -1,7 +1,7 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user')
-
+const { SECRET_KEY }  = require('../config');
 const router = express.Router();
 
 // 用户注册，当用户以POST请求向 /users/signup 请求的时候
@@ -16,33 +16,21 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-// router.post('/signin', async (req, res) => {
-//     console.log(req.body);
-//     const user = req.body;
-//     try {
-//         const doc = await User.findOne(user); // 返回值是mongo的一条数据
-//         doc.comparePassword = function(password) {
-//             return bcrypt.compareSync(password, this.password);
-//         }
-//         if (doc && doc.comparePassword(user.password)) {
-//             res.success({ username: user.username })
-//         } else {
-//             res.error('用户名或密码错误');
-//         }
-//     } catch(err) {
-//         res.error(err);
-//     }
-// })
-
-router.post('/signin', (req, res) => {
-    User.findOne(req.body).then((result) => {
-        console.log('成功', result);
-        res.success(result);
-    }).catch((err) => {
-        console.log('错误是', err);
+router.post('/signin', async (req, res) => {
+    console.log(req.body);
+    const user = req.body;
+    try {
+        const doc = await User.findOne({ username: user.username }); // 返回值是mongo的一条数据
+        if (doc && doc.comparePassword(user.password)) {
+            const jwtToken = jwt.sign({ id: doc._id, username: doc.username }, SECRET_KEY);
+            res.success({ jwtToken })
+        } else {
+            res.error('用户名或密码错误');
+        }
+    } catch(err) {
         res.error(err);
-    })
-});
+    }
+})
 
 router.post('/test', (req, res) => {
     console.log(req.body);
