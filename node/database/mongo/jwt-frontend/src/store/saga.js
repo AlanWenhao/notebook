@@ -1,9 +1,20 @@
-import { takeEvery, put, all } from 'redux-saga/effects';
+import { takeEvery, put, call, all } from 'redux-saga/effects';
 import * as types from './action-types';
+import userApi from '../api/user';
+import { decode } from '../utils/jwt';
 
 function* login(action) {
     const { payload } = action;
-    console.log(payload);
+    try {
+        console.log('发送过来的数据', payload);
+        const res = yield call(userApi.login, payload);
+        const jwtToken = res.data.data.jwtToken;
+        const user = decode(jwtToken);
+        console.log(user);
+        yield put({type: types.LOGIN_SUCCESS, user});
+    } catch(err) {
+        yield put({ type: types.LOGIN_ERROR, err });
+    }
 }
 
 function* loginFlow() {

@@ -12,7 +12,6 @@ class Signin extends Component {
             username,
             password
         }
-        console.log('提交之前', user);
         this.props.login(user);
     }
 
