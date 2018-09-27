@@ -12,12 +12,14 @@ class Signin extends Component {
             username,
             password
         }
+        console.log('提交之前', user);
         this.props.login(user);
     }
 
     render() {
+        // console.log('redux', connect);
         return (
-            <form className="c-sign">
+            <form className="c-sign" onSubmit={this.handleSubmit}>
                 <h3 className="text-center">登录</h3>
                 <div className="form-group">
                     <label htmlFor="username">用户名</label>
