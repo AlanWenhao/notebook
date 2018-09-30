@@ -16,3 +16,4 @@
 - 可以在schema上，通过给methods增加属性，可以给实例扩展方法
 - jwt.sign(payload, secretOrOrivateKey, passphrase);中间的秘钥非常重要，仅能存储在服务端，保密性要求非常高，比如有很多连锁店铺，那么他们需要拥有相同的秘钥
 - https://jwt.io 在这里可以解密token
+- 使用 JWT 可以做到后台不保存登录状态

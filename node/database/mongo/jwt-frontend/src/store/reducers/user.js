@@ -11,8 +11,9 @@ export default function(state = initState, action) {
             return { ...state, user: action.user, err: null }
         case types.LOGIN_ERROR:
             return { ...state, user: null, err: action.err }
+        case types.LOGOUT_SUCCESS:
+            return { ...state, user: null, err: null }
         default: 
             return state;
     }
-    return state;
 }
