@@ -10,3 +10,6 @@ export const LOAD_USER = 'LOAD_USER';
 export const LOGOUT = 'LOGOUT';
 // 退出成功
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+// 添加文章
+export const ADD_ARTICLE = 'ADD_ARTICLE';

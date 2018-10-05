@@ -35,6 +35,11 @@ function* logout() {
     yield put(push('/'));
 }
 
+function* addArticle(action) {
+    const { payload } = action;
+    const response = call()
+}
+
 
 function* loginFlow() {
     // 当监听到 LOGIN 的动作，会交给 login 函数处理

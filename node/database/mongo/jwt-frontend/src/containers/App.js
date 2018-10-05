@@ -4,6 +4,7 @@ import Home from './Home';
 import Signin from './Signin';
 import Signup from './Signup';
 import AddArticle from './AddArticle';
+import ArticleList from './ArticleList';
 import Header from '../components/Header';
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
                             <Route exact path="/users/signin" component={Signin} />
                             <Route exact path="/users/signup" component={Signup} />
                             <Route exact path="/articles/add" component={AddArticle} />
+                            <Route exact path="/articles/list" component={ArticleList} />
                         </div>
                     </div>
                 </div>

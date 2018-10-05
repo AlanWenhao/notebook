@@ -29,19 +29,19 @@ class AddArticle extends Component {
                 <h3 className="text-center">发表文章</h3>
                 <div className="form-group">
                     <label htmlFor="title">题目</label>
-                    <input type="text" className="form-control" ref={input => this.username = input} />
+                    <input type="text" className="form-control" ref={input => this.title = input} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="author">作者</label>
-                    <input type="text" className="form-control" ref={input => this.password = input} />
+                    <input type="text" className="form-control" ref={input => this.author = input} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="category">类别</label>
-                    <input type="text" className="form-control" ref={input => this.username = input} />
+                    <input type="text" className="form-control" ref={input => this.category = input} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="content">正文</label>
-                    <textarea className="form-control" rows="5" ref={input => this.username = input} ></textarea>
+                    <textarea className="form-control" rows="5" ref={input => this.content = input} ></textarea>
                 </div>
                 <div className="text-center">
                     <Button type="submit" variant="contained" color="primary">发布</Button>
@@ -51,4 +51,7 @@ class AddArticle extends Component {
     }
 }
 
-export default AddArticle;
+export default connect(
+    state => state.article,
+    actions
+)(AddArticle);

@@ -22,6 +22,7 @@ class Header extends Component {
                             { !this.props.user && <li><Link to="/users/signup">注册</Link></li> }
                             { !this.props.user && <li><Link to="/users/signin">登录</Link></li> }
                             { this.props.user && <li><Link to="/articles/add">发表文章</Link></li> }
+                            { this.props.user && <li><Link to="/articles/list">文章列表</Link></li> }
                         </ul>
                         { this.props.user && <ul className="nav navbar-nav navbar-right">
                             <li><a>{ this.props.user.username }</a></li>
