@@ -1,14 +1,17 @@
 import { createStore, applyMiddleware } from 'redux';
 import creatSageMiddleware from 'redux-saga';
 import logger from 'redux-logger';
+import { routerMiddleware } from 'react-router-redux';
 import reducers from './reducers';
 import rootSaga from './saga';
+import history from '../history';
 
+const router = routerMiddleware(history);
 const sageMiddleware = creatSageMiddleware();
 const store = createStore(
     reducers,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    applyMiddleware(sageMiddleware, logger)
+    applyMiddleware(sageMiddleware, router, logger)
 );
 sageMiddleware.run(rootSaga);
 
