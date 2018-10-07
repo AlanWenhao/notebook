@@ -2,6 +2,7 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import * as types from './action-types';
 import userApi from '../api/user';
+import articleApi from '../api/article';
 import { decode } from '../utils/jwt';
 
 function* login(action) {
@@ -37,7 +38,18 @@ function* logout() {
 
 function* addArticle(action) {
     const { payload } = action;
-    const response = call()
+    try {
+        const res = yield call(articleApi.addArticle, payload);
+        if (res.code === 0) {
+            yield put({ type: types.ADD_ARTICLE_SUCCESS });
+            yield put(push('/articles/list'));
+        } else {
+            yield put({ type: types.ADD_ARTICLE_FAILED, err: res.data.err });
+        }
+    } catch(err) {
+        yield put({ type: types.ADD_ARTICLE_FAILED, err });
+    }
+
 }
 
 
@@ -50,6 +62,10 @@ function* watchLoadUser() {
     yield takeEvery(types.LOAD_USER, loadUser);
 }
 
+function* watchArticle() {
+    yield takeEvery(types.ADD_ARTICLE, addArticle);
+}
+
 export default function* rootSaga() {
-    yield all([loginFlow(), watchLoadUser()]);
+    yield all([loginFlow(), watchLoadUser(), watchArticle()]);
 }

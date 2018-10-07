@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import actions from '../store/actions/user';
+import actions from '../store/actions/article';
 
 class AddArticle extends Component {
     constructor(props) {
