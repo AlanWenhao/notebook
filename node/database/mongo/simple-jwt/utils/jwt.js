@@ -3,7 +3,7 @@ const { SECRET_KEY } = require('../config');
 
 function sign(payload) {
     return jwt.sign(payload, SECRET_KEY, {
-        expiresIn: 600
+        expiresIn: 3600
     });
 }
 
