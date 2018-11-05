@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import * as types from '../action-types';
 import userApi from '../../api/user';
