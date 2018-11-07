@@ -4,20 +4,45 @@
 	<title>popup页</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<style>
-	body {
-		font-family: 'Microsoft Yahei';
-		width: 500px;
-		min-height: 100px;
+	html, body {
+		margin: 0;
+		padding: 0;
 	}
-	a {margin-right: 10px;}
+	.popup-box {
+		width: 300px;
+		padding: 2px;
+	}
+	.popup__title {
+		margin: 10px 0;
+		text-align: center;
+	}
+	.popup__btn-wrap {
+		padding-bottom: 10px;
+		text-align: center;
+	}
+	.popup__btn {
+		display: inline-block;
+	}
+	.popup__info p {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
 	</style>
 </head>
-<body style="width: 200px;">
-	<h1>popup页面</h1>
-	<h2>background</h2>
-	<div>
-		<a href="#" id="open_background">打开background</a>
+<body>
+	<div class="popup-box">
+		<p class="popup__title">饿了么短信模板</p>
+		<div class="popup__info">
+			<p class="text-primary">· 插件开启，爬取任务始终在后台运行</p>
+			<p class="text-primary">· 开启 background 页面可以查看数据</p>
+			<p class="text-primary">· 开启 background 不会停止后台任务，反而会新增为两个任务</p>
+			<p class="text-primary">· 关闭 background 仅保留后台任务，新增任务立即结束</p>
+		</div>
+		<div class="popup__btn-wrap">
+			<a class="popup__btn btn btn-info" href="#" id="open_background">打开background</a>
+		</div>
 	</div>
 	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
 	<script type="text/javascript" src="js/popup.js"></script>
