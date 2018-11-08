@@ -11,3 +11,18 @@
 $('#open_background').click(e => {
 	window.open(chrome.extension.getURL('background.html'));
 });
+
+$('#invoke_background_js').click(e => {
+	var bg = chrome.extension.getBackgroundPage();
+	bg.startMission();
+});
+
+$('#show-notification').click(e => {
+	chrome.notifications.create(null, {
+		type: 'image',
+		iconUrl: 'img/icon.png',
+		title: '饿了么短信模板',
+		message: '测试通知',
+		imageUrl: 'img/icon.png'
+	});
+});

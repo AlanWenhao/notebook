@@ -35,13 +35,18 @@
 	<div class="popup-box">
 		<p class="popup__title">饿了么短信模板</p>
 		<div class="popup__info">
-			<p class="text-primary">· 插件开启，爬取任务始终在后台运行</p>
-			<p class="text-primary">· 开启 background 页面可以查看数据</p>
-			<p class="text-primary">· 开启 background 不会停止后台任务，反而会新增为两个任务</p>
-			<p class="text-primary">· 关闭 background 仅保留后台任务，新增任务立即结束</p>
+			<p class="text-primary">· 点击"执行任务"开始一轮任务</p>
+			<p class="text-primary">· 当前测试阶段，任务不会轮训执行</p>
+			<p class="text-primary">· 推荐"打开后台"后执行，可以看到执行效果</p>
 		</div>
 		<div class="popup__btn-wrap">
-			<a class="popup__btn btn btn-info" href="#" id="open_background">打开background</a>
+			<a class="popup__btn btn btn-info" href="#" id="open_background">打开后台页面</a>
+		</div>
+		<div class="popup__btn-wrap">
+			<a class="popup__btn btn btn-warning" href="#" id="invoke_background_js">执行任务</a>
+		</div>
+		<div class="popup__btn-wrap">
+			<a class="popup__btn btn btn-info" href="#" id="show-notification">显示通知</a>
 		</div>
 	</div>
 	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>

@@ -4,16 +4,24 @@
 	<title>背景页</title>
 	<meta charset="utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+    .back__head {
+        padding: 15px;
+        text-align: center;
+    }
+    .back__info {
+        padding: 20px;
+        text-align: center;
+    }
+    </style>
 </head>
 <body>
 	<div class="container">
-		<div>
-			<a class="btn btn-warning" href="#" id="fetch-btn">跨域演示</a>
+		<div class="back__head">
+            <a class="btn btn-warning" href="#" id="fetch-btn">执行任务</a>
         </div>
-        <div>
-            <a class="btn btn-warning" href="#" id="upload-btn">上传模板</a>
-        </div>
+        <div class="back__info"></div>
         <table class="table">
             <thead>
                 <tr>
