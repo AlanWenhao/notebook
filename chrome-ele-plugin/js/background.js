@@ -45,7 +45,9 @@ function fetchUserWillChangeTpl() {
             setTimeout(() => { fetchUserWillChangeTpl() }, 500);
         } else {
             console.log('用户待审核模板请求结束', willChangeArr);
-            fetchUserUploadTpl();
+            setTimeout(() => {
+                fetchUserUploadTpl();
+            }, 130000);
         }
     }).catch((err) => {
         console.log('用户列表请求失败', err);
@@ -90,6 +92,7 @@ function circleUpload(tplArr) {
     } else {
         startFetchRecords();
     }
+    // startFetchRecords();
 }
 
 /**
@@ -122,7 +125,7 @@ function startFetchRecords() {
                     recordArr.push(item);
                 });
                 currentOffset += singlePageNum; // 更新下次请求偏移量
-                setTimeout(() => { startFetchRecords(); }, 500); // 暂停0.5继续执行
+                setTimeout(() => { startFetchRecords(); }, 1000); // 暂停1s继续执行
             }
         }
     }).catch((err) => {
@@ -150,7 +153,7 @@ function initRecordMap(arr) {
  * @param {Number} status 
  */
 function multipleUpdateNew(arr) {
-    if (arr.length) {
+    if (arr.length > 0) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
             console.log('刚上传的', currentObj);
@@ -162,8 +165,7 @@ function multipleUpdateNew(arr) {
 }
 
 function multipleUpdateOld(arr) {
-    const willUpdateArr = [];
-    if (arr.length) {
+    if (arr.length > 0) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
             if (currentObj && currentObj.status !== 1) {
