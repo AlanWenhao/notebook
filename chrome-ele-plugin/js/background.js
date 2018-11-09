@@ -169,7 +169,7 @@ function multipleUpdateOld(arr) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
             if (currentObj && currentObj.status !== 1) {
-                updateTplStatus(newStatus, currentObj.templateNo, item.titleName);
+                updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
             }
         });
     }
