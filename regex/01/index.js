@@ -13,9 +13,10 @@ function getABC(value) {
  * @param {String} value 
  */
 function wild(value) {
-    return value.match(/[1-6a-fG-M]/g);
+    return value.match(/[^]/g);
 }
 
-console.log(wild('1231a1aM3M')); // [ '1', '2', '3', '1', 'a', '1', 'a', 'M', '3', 'M' ]
+// console.log(wild('1231a1aM3M')); // [ '1', '2', '3', '1', 'a', '1', 'a', 'M', '3', 'M' ]
+
 
 

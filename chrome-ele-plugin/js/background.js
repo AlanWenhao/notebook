@@ -1,22 +1,17 @@
 
 const $tBody = $('.tbody');          // record 数据插入的位置
+let isDisable = false;               // 按钮是否disable
 const singlePageNum = 100;           // 每页查询的【条目数】
 let currentOffset = 0;               // 当前【分页偏移】
 let currentIndex = 0;                // 审查条目自定义【序号】
 let recordArr = [];                  // 饿了么短信审核记录数组
 let eleRecordMap = new Map()         // 饿了么短信审核记录Map
 let uploadTplArr = [];               // 将要上传的模板
+let uploadedNewArr = [];             // 上传成功的模板
 let willChangeArr = [];              // 店长审核中短信模板
 
 $('#fetch-btn').click((e) => {
-    currentOffset = 0;
-    currentIndex = 0;
-    recordArr = [];
-    eleRecordMap.clear();
-    uploadTplArr = [];
-    willChangeArr = [];
-    $tBody.html('');
-    fetchUserWillChangeTpl();
+    startMission();
 });
 
 // 给 popup 页面调用的方法
@@ -27,7 +22,9 @@ function startMission() {
     eleRecordMap.clear();
     uploadTplArr = [];
     willChangeArr = [];
+    uploadedNewArr = [];
     $tBody.html('');
+    $('#fetch-btn').addClass('disabled');
     fetchUserWillChangeTpl();
 }
 
@@ -44,7 +41,7 @@ function fetchUserWillChangeTpl() {
             });
             setTimeout(() => { fetchUserWillChangeTpl() }, 500);
         } else {
-            console.log('用户待审核模板请求结束', willChangeArr);
+            console.log('用户审核中模板请求结束', willChangeArr);
             setTimeout(() => {
                 fetchUserUploadTpl();
             }, 130000);
@@ -79,16 +76,8 @@ function fetchUserUploadTpl() {
  * @param {Content} content 
  */
 function circleUpload(tplArr) {
-    if (tplArr.length > 0) {
-        const arr = [];
-        tplArr.forEach((item) => {
-            arr.push(singleUpload(item));
-        });
-        Promise.all(arr).then(() => {
-            startFetchRecords();
-        }).catch((err) => {
-            console.log(err);
-        })
+    if (tplArr.length > 0) {     
+        singleUpload(tplArr[0], tplArr)
     } else {
         startFetchRecords();
     }
@@ -99,8 +88,23 @@ function circleUpload(tplArr) {
  * 配合 circleUpload 函数使用
  * @param {Object} item 店长后台获取到的【单条】【待上传】模板
  */
-function singleUpload(item) {
-    return request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(item.titleName, item.message), false, true);
+function singleUpload(item, tplArr) {
+    return request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(item.titleName, item.message), false, true).then((res) => {
+        if (!res.err) {
+            uploadedNewArr.push({
+                message: item.message,
+                titleName: item.titleName
+            });
+        }
+        tplArr.shift();
+        setTimeout(() => {
+            circleUpload(tplArr);
+        }, 200);
+    }).catch((err) => {
+        console.log('饿了么短信上传接口错误');
+        tplArr.shift();
+        circleUpload(tplArr);
+    });
 }
 
 /**
@@ -115,9 +119,11 @@ function startFetchRecords() {
             if (res.result.result.length === 0) {
                 initRecordMap(recordArr); // 初始化 Map 数据
                 setTimeout(() => {
-                    multipleUpdateNew(uploadTplArr);
+                    multipleUpdateNew(uploadedNewArr);
+                    // multipleUpdateLeave(uploadTplArr);  // 跟新遗漏的新上传模板，防止重复上床
                     multipleUpdateOld(willChangeArr);
                     notice('饿了么短信模板', '任务完成，点击按钮进行下一轮。');
+                    $('#fetch-btn').removeClass('disabled');
                 }, 2000);
             } else {
                 initTable(res.result.result);
@@ -156,20 +162,48 @@ function multipleUpdateNew(arr) {
     if (arr.length > 0) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
-            console.log('刚上传的', currentObj);
-            updateTplStatus(1, currentObj.templateNo, item.titleName);
+            if (currentObj) {
+                console.log('更新刚上传的状态0-1', currentObj);
+                updateTplStatus(1, currentObj.templateNo, item.titleName);
+            }
         });
     } else {
         console.log('没有要更新的【新上传】模板');
     }
 }
 
+/**
+ * 批量更新待审核模板状态
+ * @param {*} arr 
+ */
 function multipleUpdateOld(arr) {
     if (arr.length > 0) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
-            if (currentObj && currentObj.status !== 1) {
-                updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
+            if (currentObj) {
+                if (currentObj && currentObj.status !== 1) {
+                    console.log('更新审核通过（不通过的）', currentObj);
+                    updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
+                }
+            }
+        });
+    } else {
+        console.log('没有模板状态发生改变');
+    }
+}
+
+/**
+ * 长传成功，但未更新数据库的模板
+ * @param {*} arr 
+ */
+function multipleUpdateLeave(arr) {
+    if (arr.length > 0) {
+        arr.forEach((item) => {
+            let currentObj = eleRecordMap.get(item.titleName);
+            if (currentObj) {
+                if (currentObj && currentObj.status === 1) {
+                    updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
+                }
             }
         });
     }
