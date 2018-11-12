@@ -59,3 +59,8 @@ console.log( string.match(regex) );
 > 有个事实我们应该注意，比如我用 /good|goodbye/，去匹配 "goodbye" 字符串时，结果是 "good"  
 > 而把正则改成 /goodbye|good/，结果是 "goodbye"
 
+### 练习
+> - 匹配一个字符串是否含有 hex 16进制色值
+> - 匹配一个字符串是否是 hex 16进制色值
+> - 匹配24小时制时间，比如：23:59、02:07
+
