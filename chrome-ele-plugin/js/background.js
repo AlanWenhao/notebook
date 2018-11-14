@@ -1,37 +1,59 @@
+const $tBody = $('.tbody');                                 // 表格body
+const $fetchBtn = $('#fetch-btn');                          // 获取用户模板
+const $compare = $('.compare');                             // 更新状态
+const $updataNumDom = $('.will-change-success');            // 显示更新数量的DOM
+const $eleTplNumDom = $('.will-change-ele')                 // 饿了么远程审核记录
+const singlePageNum = 100;                                  // 每页查询的【条目数】
+let currentOffset = 0;                                      // 当前【分页偏移】
+let updateSum = 0;                                          // 更新状态成功数量
+let recordArr = [];                                         // 饿了么短信审核记录数组
+let eleRecordMap = new Map()                                // 饿了么短信审核记录Map
+let uploadTplArr = [];                                      // 用户待上传模板
+let willChangeArr = [];                                     // 用户审核中模板
+let timer;                                                  // 备用定时器
+let intervalTime = 130;                                     // 定时器时间
 
-const $tBody = $('.tbody');          // record 数据插入的位置
-let isDisable = false;               // 按钮是否disable
-const singlePageNum = 100;           // 每页查询的【条目数】
-let currentOffset = 0;               // 当前【分页偏移】
-let currentIndex = 0;                // 审查条目自定义【序号】
-let recordArr = [];                  // 饿了么短信审核记录数组
-let eleRecordMap = new Map()         // 饿了么短信审核记录Map
-let uploadTplArr = [];               // 将要上传的模板
-let uploadedNewArr = [];             // 上传成功的模板
-let willChangeArr = [];              // 店长审核中短信模板
-
-$('#fetch-btn').click((e) => {
-    startMission();
+$fetchBtn.on('click', function() {
+    if ($fetchBtn.hasClass('disabled')) {
+        return;
+    }
+    $fetchBtn.addClass('disabled');
+    $tBody.html('');
+    uploadTplArr = [];
+    intervalTime = 130;
+    fetchUserUploadTpl();
 });
 
-// 给 popup 页面调用的方法
-function startMission() {
+$compare.on('click', function() {
+    if ($compare.hasClass('disabled')) {
+        return;
+    }
     currentOffset = 0;
-    currentIndex = 0;
+    updateSum = 0;
+    willChangeArr = [];
     recordArr = [];
     eleRecordMap.clear();
-    uploadTplArr = [];
-    willChangeArr = [];
-    uploadedNewArr = [];
-    $tBody.html('');
-    $('#fetch-btn').addClass('disabled');
     fetchUserWillChangeTpl();
-}
+})
 
-$('#upload-btn').click((e) => {});
+$tBody.on('click', function(e) {
+    const target = e.target;
+    if (target.nodeName === 'BUTTON') {
+        const trDom = target.parentElement.parentElement;
+        const currentName = trDom.getElementsByClassName('msg-name')[0].innerHTML;
+        const currentContent = trDom.getElementsByClassName('msg-content')[0].innerHTML;
+        if (target.classList.contains('upload-btn')) {
+            console.log('同意');
+            singleUpload(currentName, currentContent, trDom);
+        } else {
+            console.log('拒绝');
+            singleReject(currentName, trDom);
+        }
+    }
+});
 
 /**
- * 请求用户审核中模板
+ * 获取用户待审核模板
  */
 function fetchUserWillChangeTpl() {
     request('http://waimaicenter.superboss.cc/sms/getEleCustomSmsTemplate', { status: 1 }, true).then((res) => {
@@ -41,10 +63,9 @@ function fetchUserWillChangeTpl() {
             });
             setTimeout(() => { fetchUserWillChangeTpl() }, 500);
         } else {
+            startFetchRecords();
             console.log('用户审核中模板请求结束', willChangeArr);
-            setTimeout(() => {
-                fetchUserUploadTpl();
-            }, 130000);
+
         }
     }).catch((err) => {
         console.log('用户列表请求失败', err);
@@ -63,7 +84,19 @@ function fetchUserUploadTpl() {
             setTimeout(() => { fetchUserUploadTpl() }, 500);
         } else {
             console.log('用户未上传模板请求结束', uploadTplArr);
-            circleUpload(uploadTplArr);
+            // 暂停更新状态按钮 130s
+            $compare.addClass('disabled');
+            $fetchBtn.removeClass('disabled');
+            initTable(uploadTplArr);
+            timer = setInterval(() => {
+                intervalTime -= 1;
+                $compare.html(`更新状态${intervalTime}s`);
+            }, 1000);
+            setTimeout(() => {
+                $compare.html(`更新状态`);
+                clearInterval(timer);
+                $compare.removeClass('disabled');
+            }, 130000);
         }
     }).catch((err) => {
         console.log('用户列表请求失败', err);
@@ -71,39 +104,69 @@ function fetchUserUploadTpl() {
 }
 
 /**
- * 循环上传模板方法
- * @param {String} title 
- * @param {Content} content 
+ * 同意上传
+ * @param {*} name 
+ * @param {*} content 
+ * @param {*} trDom 
  */
-function circleUpload(tplArr) {
-    if (tplArr.length > 0) {     
-        singleUpload(tplArr[0], tplArr)
-    } else {
-        startFetchRecords();
-    }
-    // startFetchRecords();
+function singleUpload(name, content, trDom) {
+    request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(name, content), false, true).then((res) => {
+        if (!res.err) {
+            updateTplStatus(1, name).then(() => {
+                trDom.style.background = '#f0f0f0';
+                trDom.getElementsByClassName('msg-action')[0].innerHTML = '<span style="color:#999;">已上传</span>';
+            }).catch(() => {
+                alert('跟新状态接口错误，请重新“上传”');
+            });
+        } else {
+            alert('饿了么上传错误，请重试');
+        }
+    }).catch((err) => {
+        alert('饿了么接口错误，请重试');
+    });
 }
 
 /**
- * 配合 circleUpload 函数使用
- * @param {Object} item 店长后台获取到的【单条】【待上传】模板
+ * 拒绝上传
+ * @param {*} name 
+ * @param {*} content 
+ * @param {*} trDom 
  */
-function singleUpload(item, tplArr) {
-    return request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(item.titleName, item.message), false, true).then((res) => {
-        if (!res.err) {
-            uploadedNewArr.push({
-                message: item.message,
-                titleName: item.titleName
-            });
-        }
-        tplArr.shift();
-        setTimeout(() => {
-            circleUpload(tplArr);
-        }, 200);
-    }).catch((err) => {
-        console.log('饿了么短信上传接口错误');
-        tplArr.shift();
-        circleUpload(tplArr);
+function singleReject(name, trDom) {
+    updateTplStatus(3, name).then(() => {
+        trDom.style.background = '#f0f0f0';
+        trDom.getElementsByClassName('msg-action')[0].innerHTML = '<span style="color:red;">已拒绝</span>';
+    }).catch(() => {
+        alert('跟新接口错误，请重新“拒绝”');
+    });
+}
+
+/**
+ * 更新短信模板状态 => 审核中、审核失败
+ * @param {Number} status 
+ * @param {String} name 
+ * @param {String} msg 
+ */
+function updateTplStatus(status, title) {
+    const data = {
+        status: status,
+        titleName: title
+    }
+    return request('http://waimaicenter.superboss.cc/sms/updateEleCustomSmsTemplate', data, true, false);
+}
+
+/**
+ * 更新短信模板状态 => 审核成功
+ */
+function updateTplStatusToSuccess(status, code, title) {
+    const data = {
+        status: status,
+        templateIdentifier: code,
+        titleName: title
+    }
+    return request('http://waimaicenter.superboss.cc/sms/updateEleCustomSmsTemplate', data, true, false).then(() => {
+        updateSum += 1;
+        updateUpdatedDomNum(updateSum);
     });
 }
 
@@ -118,15 +181,12 @@ function startFetchRecords() {
         } else {  // 请求成功  
             if (res.result.result.length === 0) {
                 initRecordMap(recordArr); // 初始化 Map 数据
+                updateEleTplDomNum(recordArr.length);
                 setTimeout(() => {
-                    multipleUpdateNew(uploadedNewArr);
-                    // multipleUpdateLeave(uploadTplArr);  // 跟新遗漏的新上传模板，防止重复上床
                     multipleUpdateOld(willChangeArr);
-                    notice('饿了么短信模板', '任务完成，点击按钮进行下一轮。');
                     $('#fetch-btn').removeClass('disabled');
                 }, 2000);
             } else {
-                initTable(res.result.result);
                 res.result.result.forEach((item) => {
                     recordArr.push(item);
                 });
@@ -140,36 +200,12 @@ function startFetchRecords() {
     });
 }
 
-
-/**
- * 跟新饿了么记录 Map
- * @param {Array} arr 
- */
 function initRecordMap(arr) {
     arr.forEach((item) => {
         // 审核中：1； 成功：2； 失败：3；
         eleRecordMap.set(item.name, { templateNo: item.templateNo, status: item.templateStatus === 'PASS' ? 2 : item.templateStatus === 'REVIEW' ? 1 : 3 });
     });
     console.log(eleRecordMap);
-}
-
-/**
- * 批量更新新上传的模板状态
- * @param {Array} arr 要跟新的数组 Array<Object>，object包含 status, code, title
- * @param {Number} status 
- */
-function multipleUpdateNew(arr) {
-    if (arr.length > 0) {
-        arr.forEach((item) => {
-            let currentObj = eleRecordMap.get(item.titleName);
-            if (currentObj) {
-                console.log('更新刚上传的状态0-1', currentObj);
-                updateTplStatus(1, currentObj.templateNo, item.titleName);
-            }
-        });
-    } else {
-        console.log('没有要更新的【新上传】模板');
-    }
 }
 
 /**
@@ -182,69 +218,49 @@ function multipleUpdateOld(arr) {
             let currentObj = eleRecordMap.get(item.titleName);
             if (currentObj) {
                 if (currentObj && currentObj.status !== 1) {
-                    console.log('更新审核通过（不通过的）', currentObj);
-                    updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
+                    console.log('更新审核通过', currentObj);
+                    updateTplStatusToSuccess(currentObj.status, currentObj.templateNo, item.titleName);
                 }
             }
         });
+        notice('自动审核', '本轮跟审核状态更新任务完成');
     } else {
-        console.log('没有模板状态发生改变');
+        console.log('用户待审核模板数量为0');
+        $updataNumDom.html('用户待审核模板数量为0');
+        notice('自动审核', '本轮跟审核状态更新任务完成');
     }
 }
 
-/**
- * 长传成功，但未更新数据库的模板
- * @param {*} arr 
- */
-function multipleUpdateLeave(arr) {
-    if (arr.length > 0) {
-        arr.forEach((item) => {
-            let currentObj = eleRecordMap.get(item.titleName);
-            if (currentObj) {
-                if (currentObj && currentObj.status === 1) {
-                    updateTplStatus(currentObj.status, currentObj.templateNo, item.titleName);
-                }
-            }
-        });
-    }
-}
+
 
 /**
- * 更新短信模板状态
- * @param {Number} status 
- * @param {String} name 
- * @param {String} msg 
- */
-function updateTplStatus(status, code, title) {
-    const data = {
-        status: status,
-        templateIdentifier: code,
-        titleName: title
-    }
-    return request('http://waimaicenter.superboss.cc/sms/updateEleCustomSmsTemplate', data, true, false);
-}
-
-/**
- * 得到请求数据，更新 DOM
- * @param {Object} result 请求结果
+ * 生成dom
+ * @param {Array} arr 
  */
 function initTable(arr) {
-    let str = '';
-    arr.forEach((item, index) => {
-        str += `
-        <tr>
-            <td>${currentIndex + index + 1}</td>
-            <td>${item.templateNo}</td>
-            <td>${item.name}</td>
-            <td>${item.templateStatus === 'PASS' ? '<span style="color: #ec971f">已通过</span>' : `${item.templateStatus === 'REVIEW' ? '<span style="color: #a99cff">审核中</span>' : '<strong style="color:#f56c6c">未通过</strong>'}`}</td>
-            <td>${item.commitTime.replace('T', ' ')}</td>
-        </tr>`;
-    });
-    $tBody.append(str);
-    currentIndex += arr.length; // 更新【record序号】
+    if (arr.length && arr.length > 0) {
+        let str = '';
+        arr.forEach((item, index) => {
+            str += `
+            <tr>
+                <td>${index + 1}</td>
+                <td class="msg-name">${item.titleName}</td>
+                <td class="msg-content">${item.message}</td>
+                <td class="msg-action">
+                    <button class="btn btn-success upload-btn">上传</button>
+                    <button class="btn btn-danger delete-btn">拒绝</button>
+                </td>
+            </tr>
+            `
+        });
+        $tBody.append(str);
+    } else {
+
+    }
 }
 
-/* ------------------- 公用方法 ----------------------- */
+
+/* -------------------------- 公用函数 ------------------------- */
 
 /**
  * 请求函数
@@ -333,38 +349,11 @@ function notice(title, msg) {
     });
 }
 
+function updateUpdatedDomNum(num) {
+    $updataNumDom.html(`本轮更新顾客模板${num}条`);
+}
 
+function updateEleTplDomNum(num) {
+    $eleTplNumDom.html(`获取饿了么模板${num}条`);
+}
 
-/**
- * 思路
- * 1：
- * （1）轮训饿了么【记录】，保存数据
- * （2）轮训【用户模板】，保存数据
- * （3）轮训【用户模板 -- 未审核】 --->  提交审核
- * （4）轮训【用户模板 -- 审核中】 --->  与【记录】比较状态 --->  上传【变更模板】
- * 
- * 2：
- * （1）定时执行 1 中四步操作（顺序待确定）
- */
-
-
- /**
-  * 实现中注意点：
-  * 1.异步任务管理
-  * （1）分页查询【记录】
-  * （2）递归【用户模板 -- 未审核】   不用递归，用Promise.all
-  * （3）递归【用户模板 -- 审核中】
-  */
-
-
-  /**
-   * chrome 插件机制先注意的地方
-   * 1.插件一旦开启，任务将在浏览器后台进行。
-   * 2.如果打开【后台】页面，正在后台的执行的任务【不会停止】。这时候会有两个任务同时在跑
-   * 3.打开background页面，店长用户数据的情况
-   */
-
-   /**
-    * 最终实现：
-    * 请求【待更新】 => 请求【待上传】 => 上传模板 => 请求【饿了么审核记录】 => 比较【提取数据】 =>  跟新【待上传】状态 => 更新【待更新】状态
-    */
