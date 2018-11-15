@@ -246,7 +246,7 @@ function initTable(arr) {
                 <td>${index + 1}</td>
                 <td class="msg-name">${item.titleName}</td>
                 <td class="msg-content">${item.message}</td>
-                <td class="msg-action">
+                <td class="msg-action" style="min-width: 130px;">
                     <button class="btn btn-success upload-btn">上传</button>
                     <button class="btn btn-danger delete-btn">拒绝</button>
                 </td>
