@@ -42,12 +42,26 @@
             <tbody class="tbody"></tbody>
         </table>
         <div class="back__head">
-            <button class="btn btn-default compare">更新状态</button>
+            <button class="btn btn-warning compare">更新状态</button>
+            <button class="btn btn-default show-btn">显示饿了么模板审核记录</button>
         </div>
         <div class="bg-success will-change-result">
             <p class="will-change-ele"></p>
             <p class="will-change-success"></p>
         </div>
+        <table class="table table-bordered record-table" style="display: none;">
+            <thead>
+                <tr>
+                    <td>序号</td>
+                    <td>短信id</td>
+                    <td>标题</td>
+                    <td>短信内容</td>
+                    <td>状态</td>
+                    <td>时间</td>
+                </tr>
+            </thead>
+            <tbody class="record-body"></tbody>
+        </table>
 	</div>
     <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
     <!-- <script type="text/javascript" src="js/bootstrap.min.js"></script> -->

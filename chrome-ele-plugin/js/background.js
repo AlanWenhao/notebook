@@ -1,6 +1,8 @@
 const $tBody = $('.tbody');                                 // 表格body
+const $recordBody = $('.record-body');                      // record 表格 body
 const $fetchBtn = $('#fetch-btn');                          // 获取用户模板
 const $compare = $('.compare');                             // 更新状态
+const $showBtn = $('.show-btn');                            // 显示隐藏审核记录
 const $updataNumDom = $('.will-change-success');            // 显示更新数量的DOM
 const $eleTplNumDom = $('.will-change-ele')                 // 饿了么远程审核记录
 const singlePageNum = 100;                                  // 每页查询的【条目数】
@@ -12,6 +14,7 @@ let uploadTplArr = [];                                      // 用户待上传�
 let willChangeArr = [];                                     // 用户审核中模板
 let timer;                                                  // 备用定时器
 let intervalTime = 130;                                     // 定时器时间
+let isShowRecordTable = false;                              // 是否显示 record table
 
 $fetchBtn.on('click', function() {
     if ($fetchBtn.hasClass('disabled')) {
@@ -35,6 +38,16 @@ $compare.on('click', function() {
     eleRecordMap.clear();
     fetchUserWillChangeTpl();
 })
+
+$showBtn.on('click', function() {
+    if (!isShowRecordTable) {
+        $('.record-table').show();
+        isShowRecordTable = true;
+    } else {
+        $('.record-table').hide();
+        isShowRecordTable = false;
+    }
+});
 
 $tBody.on('click', function(e) {
     const target = e.target;
@@ -181,6 +194,7 @@ function startFetchRecords() {
         } else {  // 请求成功  
             if (res.result.result.length === 0) {
                 initRecordMap(recordArr); // 初始化 Map 数据
+                initRecordTable(recordArr);
                 updateEleTplDomNum(recordArr.length);
                 setTimeout(() => {
                     multipleUpdateOld(willChangeArr);
@@ -257,6 +271,22 @@ function initTable(arr) {
     } else {
 
     }
+}
+
+function initRecordTable(arr) {
+    let str = '';
+    arr.forEach((item, index) => {
+        str += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${item.templateNo}</td>
+            <td>${item.name}</td>
+            <td>${item.content}</td>
+            <td>${item.templateStatus === 'PASS' ? '<span style="color: #ec971f">已通过</span>' : `${item.templateStatus === 'REVIEW' ? '<span style="color: #a99cff">审核中</span>' : '<strong style="color:#f56c6c">未通过</strong>'}`}</td>
+            <td>${item.commitTime.replace('T', ' ')}</td>
+        </tr>`;
+    });
+    $recordBody.append(str);
 }
 
 
