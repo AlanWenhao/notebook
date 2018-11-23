@@ -55,13 +55,27 @@ $tBody.on('click', function(e) {
         const trDom = target.parentElement.parentElement;
         const currentName = trDom.getElementsByClassName('msg-name')[0].innerHTML;
         const currentContent = trDom.getElementsByClassName('msg-content')[0].innerHTML;
+        const currentReson = trDom.getElementsByClassName('reject-text')[0].value;
         if (target.classList.contains('upload-btn')) {
             console.log('同意');
             singleUpload(currentName, currentContent, trDom);
         } else {
+            if (target.classList.contains('disabled')) return;
             console.log('拒绝');
-            singleReject(currentName, trDom);
+            singleReject(currentName, currentReson, trDom);
         }
+    }
+});
+
+// 输入拒绝原因事件
+$tBody.on('input', function(e) {
+    const value = e.target.value;
+    const trDom = e.target.parentElement.parentElement;
+    const currentDelBtn = trDom.getElementsByClassName('delete-btn')[0];
+    if (value !== '') {
+        currentDelBtn.classList.remove('disabled');
+    } else {
+        currentDelBtn.classList.add('disabled');
     }
 });
 
@@ -78,7 +92,6 @@ function fetchUserWillChangeTpl() {
         } else {
             startFetchRecords();
             console.log('用户审核中模板请求结束', willChangeArr);
-
         }
     }).catch((err) => {
         console.log('用户列表请求失败', err);
@@ -97,10 +110,16 @@ function fetchUserUploadTpl() {
             setTimeout(() => { fetchUserUploadTpl() }, 500);
         } else {
             console.log('用户未上传模板请求结束', uploadTplArr);
+            if (uploadTplArr.length === 0) {
+                alert('没有待上传模板');
+            }
             // 暂停更新状态按钮 130s
             $compare.addClass('disabled');
             $fetchBtn.removeClass('disabled');
             initTable(uploadTplArr);
+            if (timer) {
+                clearInterval(timer);
+            }
             timer = setInterval(() => {
                 intervalTime -= 1;
                 $compare.html(`更新状态${intervalTime}s`);
@@ -125,7 +144,7 @@ function fetchUserUploadTpl() {
 function singleUpload(name, content, trDom) {
     request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(name, content), false, true).then((res) => {
         if (!res.err) {
-            updateTplStatus(1, name).then(() => {
+            updateTplStatus(1, name, '').then(() => {
                 trDom.style.background = '#f0f0f0';
                 trDom.getElementsByClassName('msg-action')[0].innerHTML = '<span style="color:#999;">已上传</span>';
             }).catch(() => {
@@ -145,10 +164,11 @@ function singleUpload(name, content, trDom) {
  * @param {*} content 
  * @param {*} trDom 
  */
-function singleReject(name, trDom) {
-    updateTplStatus(3, name).then(() => {
+function singleReject(name, reason, trDom) {
+    updateTplStatus(3, name, reason).then(() => {
         trDom.style.background = '#f0f0f0';
         trDom.getElementsByClassName('msg-action')[0].innerHTML = '<span style="color:red;">已拒绝</span>';
+        trDom.getElementsByClassName('reason-td')[0].innerHTML = trDom.getElementsByClassName('reject-text')[0].value;
     }).catch(() => {
         alert('跟新接口错误，请重新“拒绝”');
     });
@@ -160,10 +180,21 @@ function singleReject(name, trDom) {
  * @param {String} name 
  * @param {String} msg 
  */
-function updateTplStatus(status, title) {
-    const data = {
-        status: status,
-        titleName: title
+function updateTplStatus(status, title, reason, tplIdentifier = null) {
+    let data;
+    if (tplIdentifier) {
+        data = {
+            status: status,
+            titleName: title,
+            tplIdentifier: tplIdentifier,
+            explanation: reason
+        }
+    } else {
+        data = {
+            status: status,
+            titleName: title,
+            explanation: reason
+        }
     }
     return request('http://waimaicenter.superboss.cc/sms/updateEleCustomSmsTemplate', data, true, false);
 }
@@ -189,10 +220,14 @@ function updateTplStatusToSuccess(status, code, title) {
 function startFetchRecords() {
     let originData = initFetchData(singlePageNum, currentOffset);
     request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.querySMSTemplateList', originData, false, true).then((res) => {
+        const isNoReviewing = res.result.result.filter(item => item.templateStatus === "REVIEW").length === 0; // 本轮请求的数据是否都已经审核
         if (!res.result) { // 请求有 err
             // 请求出错
         } else {  // 请求成功  
-            if (res.result.result.length === 0) {
+            res.result.result.forEach((item) => {
+                recordArr.push(item);
+            });
+            if (res.result.result.length === 0 || isNoReviewing) {
                 initRecordMap(recordArr); // 初始化 Map 数据
                 initRecordTable(recordArr);
                 updateEleTplDomNum(recordArr.length);
@@ -201,9 +236,6 @@ function startFetchRecords() {
                     $('#fetch-btn').removeClass('disabled');
                 }, 2000);
             } else {
-                res.result.result.forEach((item) => {
-                    recordArr.push(item);
-                });
                 currentOffset += singlePageNum; // 更新下次请求偏移量
                 setTimeout(() => { startFetchRecords(); }, 1000); // 暂停1s继续执行
             }
@@ -231,9 +263,11 @@ function multipleUpdateOld(arr) {
         arr.forEach((item) => {
             let currentObj = eleRecordMap.get(item.titleName);
             if (currentObj) {
-                if (currentObj && currentObj.status !== 1) {
+                if (currentObj && currentObj.status === 2) {
                     console.log('更新审核通过', currentObj);
                     updateTplStatusToSuccess(currentObj.status, currentObj.templateNo, item.titleName);
+                } else if (currentObj && currentObj.status === 3) {
+                    updateTplStatus(currentObj.status, item.titleName, currentObj.reason, currentObj.templateNo)
                 }
             }
         });
@@ -256,14 +290,15 @@ function initTable(arr) {
         let str = '';
         arr.forEach((item, index) => {
             str += `
-            <tr>
+            <tr class="tr-group">
                 <td>${index + 1}</td>
                 <td class="msg-name">${item.titleName}</td>
-                <td class="msg-content">${item.message}</td>
+                <td class="msg-content"><pre>${item.message}</pre></td>
                 <td class="msg-action" style="min-width: 130px;">
                     <button class="btn btn-success upload-btn">上传</button>
-                    <button class="btn btn-danger delete-btn">拒绝</button>
+                    <button class="btn btn-danger delete-btn disabled">拒绝</button>
                 </td>
+                <td class="reason-td"><textarea class="form-control reject-text"></textarea></td>
             </tr>
             `
         });
