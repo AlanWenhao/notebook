@@ -316,7 +316,7 @@ function initRecordTable(arr) {
             <td>${index + 1}</td>
             <td>${item.templateNo}</td>
             <td>${item.name}</td>
-            <td>${item.content}</td>
+            <td><pre>${item.content}</pre></td>
             <td>${item.templateStatus === 'PASS' ? '<span style="color: #ec971f">已通过</span>' : `${item.templateStatus === 'REVIEW' ? '<span style="color: #a99cff">审核中</span>' : '<strong style="color:#f56c6c">未通过</strong>'}`}</td>
             <td>${item.commitTime.replace('T', ' ')}</td>
         </tr>`;
