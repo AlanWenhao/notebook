@@ -5,6 +5,8 @@
 - Redux 除了和 React 一起用外，还支持其它界面库。 它体小精悍（只有2kB，包括依赖）。
 
  ### redux的诞生，flux架构
+ [flux](http://pixelhunter.me/post/110248593059/flux-solutions-compared-by-example)
+ [Flux 架构入门教程 阮一峰](http://www.ruanyifeng.com/blog/2016/01/flux.html)
  > Flux是为了解决在前端模块化开发后，组件之间的频繁数据交互导致的项目维护复杂的问题。
 
  - 为什么出现
