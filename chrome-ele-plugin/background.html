@@ -39,6 +39,36 @@
         top: 50%;
         transform: translateY(-50%);
     }
+    .msg-content {
+        position: relative;
+    }
+    .msg-content:hover .msg-content-box {
+        visibility: visible;
+        transform: scaleY(1);
+        opacity: 1;
+    }
+    .msg-content-box {
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        max-height: 300px;
+        border-radius: 6px;
+        box-shadow: 5px 5px 5px 0 rgba(0,0,0,.1);
+        background: #f4fecb;
+        transform: scaleY(0);
+        opacity: 0;
+        transition: all .3s ease-in-out;
+        transform-origin: top;
+    }
+    .msg-content-msg {
+        display: flex;
+        padding: 5px 10px;
+    }
+    .msg-content-msg-left { flex: 8 }
+    .msg-content-msg-right { flex: 2; color: #58c4e8; text-align: center; }
     </style>
 </head>
 <body>

@@ -293,7 +293,20 @@ function initTable(arr) {
             <tr class="tr-group">
                 <td>${index + 1}</td>
                 <td class="msg-name">${item.titleName}</td>
-                <td class="msg-content"><pre>${item.message}</pre></td>
+                <td class="msg-content">
+                    <pre>${item.message}</pre>
+                    ${item.similarCheckResult ? JSON.parse(item.similarCheckResult).map(info => (
+
+                        `<div class="msg-content-box">
+                            <div style="padding: 10px;text-align: center;color: #58c4e8;">${item.message}</div>
+                            <div class="msg-content-msg">
+                                <div class="msg-content-msg-left">${info.message}</div>
+                                <div class="msg-content-msg-right">${Number(info.score).toFixed(4) * 100 + '%'}</div>
+                            </div>
+                        </div>
+                        `
+                    )) : ''}
+                </td>
                 <td class="msg-action" style="min-width: 130px;">
                     <button class="btn btn-success upload-btn">上传</button>
                     <button class="btn btn-danger delete-btn disabled">拒绝</button>
