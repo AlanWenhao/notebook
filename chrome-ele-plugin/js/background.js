@@ -288,23 +288,36 @@ function multipleUpdateOld(arr) {
 function initTable(arr) {
     if (arr.length && arr.length > 0) {
         let str = '';
+        let currentSimilar = '';
         arr.forEach((item, index) => {
+            currentSimilar = '';
+            if (item.similarCheckResult) {
+                JSON.parse(item.similarCheckResult).forEach(info => {
+                    currentSimilar += `
+                        <div class="msg-content-msg">
+                            <div class="msg-content-msg-left">${info.message}</div>
+                            <div class="msg-content-msg-right">${(Number(info.score) * 100).toFixed(2) + '%'}</div>
+                        </div>
+                    `
+                });
+            } else {
+                if (item.similarCheckResult === null) currentSimilar = `<p style="text-align:center;padding:10px;">未处理</p>`;
+                else currentSimilar = `<p style="text-align:center;padding:10px;">相似度小于50%</p>`;
+            }
+            if (item.similarCheckResult) {
+                console.log(JSON.parse(item.similarCheckResult));
+            }
             str += `
             <tr class="tr-group">
                 <td>${index + 1}</td>
                 <td class="msg-name">${item.titleName}</td>
+                <td>${item.type}</td>
                 <td class="msg-content">
                     <pre>${item.message}</pre>
-                    ${item.similarCheckResult ? JSON.parse(item.similarCheckResult).map(info => (
-                        `<div class="msg-content-box">
-                            <div style="padding: 10px;text-align: center;color: #58c4e8;">${item.message}</div>
-                            <div class="msg-content-msg">
-                                <div class="msg-content-msg-left">${info.message}</div>
-                                <div class="msg-content-msg-right">${(Number(info.score) * 100).toFixed(2) + '%'}</div>
-                            </div>
-                        </div>
-                        `
-                    )) : item.similarCheckResult === null ? '<p class="msg-content-box" style="text-align:center;padding:10px;">未处理</p>' : '<p class="msg-content-box" style="text-align:center;padding:10px;">相似度小于50%</p>'}
+                    <div class="msg-content-box">
+                        <div style="padding: 10px;text-align: center;color: #58c4e8;">${item.message}</div>
+                        ${currentSimilar}
+                    </div>
                 </td>
                 <td class="msg-action" style="min-width: 130px;">
                     <button class="btn btn-success upload-btn">上传</button>
