@@ -296,16 +296,15 @@ function initTable(arr) {
                 <td class="msg-content">
                     <pre>${item.message}</pre>
                     ${item.similarCheckResult ? JSON.parse(item.similarCheckResult).map(info => (
-
                         `<div class="msg-content-box">
                             <div style="padding: 10px;text-align: center;color: #58c4e8;">${item.message}</div>
                             <div class="msg-content-msg">
                                 <div class="msg-content-msg-left">${info.message}</div>
-                                <div class="msg-content-msg-right">${Number(info.score).toFixed(4) * 100 + '%'}</div>
+                                <div class="msg-content-msg-right">${(Number(info.score) * 100).toFixed(2) + '%'}</div>
                             </div>
                         </div>
                         `
-                    )) : ''}
+                    )) : item.similarCheckResult === null ? '<p class="msg-content-box" style="text-align:center;padding:10px;">未处理</p>' : '<p class="msg-content-box" style="text-align:center;padding:10px;">相似度小于50%</p>'}
                 </td>
                 <td class="msg-action" style="min-width: 130px;">
                     <button class="btn btn-success upload-btn">上传</button>
