@@ -54,10 +54,10 @@ $tBody.on('click', function(e) {
     if (target.nodeName === 'BUTTON') {
         const trDom = target.parentElement.parentElement;
         const currentName = trDom.getElementsByClassName('msg-name')[0].innerHTML;
-        const currentContent = trDom.getElementsByClassName('msg-content')[0].innerHTML;
+        const currentContent = trDom.getElementsByClassName('msg-content-text')[0].innerHTML;
         const currentReson = trDom.getElementsByClassName('reject-text')[0].value;
         if (target.classList.contains('upload-btn')) {
-            console.log('同意');
+            console.log(currentContent);
             singleUpload(currentName, currentContent, trDom);
         } else {
             if (target.classList.contains('disabled')) return;
@@ -143,7 +143,8 @@ function fetchUserUploadTpl() {
  */
 function singleUpload(name, content, trDom) {
     request('https://open.shop.ele.me/api/invoke?method=SMSTemplateAPIService.saveSMSTemplate', initUploadData(name, content), false, true).then((res) => {
-        if (!res.err) {
+        console.log(res);
+        if (!res.error) {
             updateTplStatus(1, name, '').then(() => {
                 trDom.style.background = '#f0f0f0';
                 trDom.getElementsByClassName('msg-action')[0].innerHTML = '<span style="color:#999;">已上传</span>';
@@ -151,7 +152,7 @@ function singleUpload(name, content, trDom) {
                 alert('跟新状态接口错误，请重新“上传”');
             });
         } else {
-            alert('饿了么上传错误，请重试');
+            alert(res.error.message);
         }
     }).catch((err) => {
         alert('饿了么接口错误，请重试');
@@ -313,7 +314,7 @@ function initTable(arr) {
                 <td class="msg-name">${item.titleName}</td>
                 <td>${item.type}</td>
                 <td class="msg-content">
-                    <pre>${item.message}</pre>
+                    <pre class="msg-content-text">${item.message}</pre>
                     <div class="msg-content-box">
                         <div style="padding: 10px;text-align: center;color: #58c4e8;">${item.message}</div>
                         ${currentSimilar}
