@@ -2,7 +2,7 @@
   "name": "lazy-loading",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "zhangwenhao <yuerang.zwh@raycloud.com>",
+  "author": "zhangwenhao",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
