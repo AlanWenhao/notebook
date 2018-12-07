@@ -12,7 +12,7 @@ function addMark(str) {
 function thoundGutter(str) {
     return str.replace(/(?!^)(?=(\d{3})+$)/g, ',');
 }
-// console.log(thoundGutter('123456789'));
+console.log(thoundGutter('123456789'));
 
 /**
  * 连续的千位分割
