@@ -153,7 +153,7 @@ function reducer(state = initState, action) {
         case UPDATE_CONTENT_BG:
             return { ...state, content: { ...state.content, bg: action.bg } }
         default:
-            return;
+            return state;
     }
 }
 let store = createStore(reducer);
