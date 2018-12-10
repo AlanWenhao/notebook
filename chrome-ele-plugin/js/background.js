@@ -387,11 +387,11 @@ function request(url, data, isFormData = false, shouldParseString = false) {
  */
 function initUploadData(title, content) {
     return {
-        id: "4fde38de-1b28-423d-84ac-3404f14e6775",
+        id: "A3985B44AA83430D9CA77B611B3A6C12|1544412184001",
         metas: {
             appName: "Odin",
             appVersion: "4.4.0",
-            ksid: "NTVMODMTAwMzQ2NTk0ODU4OTAxTVZmTnlOazRQ"
+            ksid: "OTU0NWMTAwMzQ2NTk0ODU4OTAxTVdtY3YrZzhQ"
         },
         method: "saveSMSTemplate",
         ncp: "2.0.0",
