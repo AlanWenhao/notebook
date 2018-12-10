@@ -387,11 +387,11 @@ function request(url, data, isFormData = false, shouldParseString = false) {
  */
 function initUploadData(title, content) {
     return {
-        id: "A3985B44AA83430D9CA77B611B3A6C12|1544412184001",
+        id: "C3BDDA7500144B5F92D0A2FB330FA663|1544440706740",
         metas: {
             appName: "Odin",
             appVersion: "4.4.0",
-            ksid: "OTU0NWMTAwMzQ2NTk0ODU4OTAxTVdtY3YrZzhQ"
+            ksid: "Y2VLN2MTAwMzQ2NTk0ODU4OTAxTVdvS2k2MjFQ"
         },
         method: "saveSMSTemplate",
         ncp: "2.0.0",
@@ -412,11 +412,11 @@ function initUploadData(title, content) {
  */
 function initFetchData(limit, offset) {
     return {
-        id: "4ef6c4fb-3fc4-4746-b1ca-4a943392e1b0",
+        id: "DC52003F5C4D465EBB5CCDD9DD567528|1544440526486",
         metas: {
             appName: "Odin",
             appVersion: "4.4.0",
-            ksid: "NTVMODMTAwMzQ2NTk0ODU4OTAxTVZmTnlOazRQ"
+            ksid: "Y2VLN2MTAwMzQ2NTk0ODU4OTAxTVdvS2k2MjFQ"
         },
         method: "querySMSTemplateList",
         ncp: "2.0.0",
