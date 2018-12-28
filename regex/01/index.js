@@ -26,7 +26,7 @@ function wild(value) {
  * #Fc01Df
  * #FFF
  * #ffE
- * #三个或留个数字字母
+ * #三个或六个数字字母
  */
 function matchHexColor(str) {
     const regexp = /^#([0-9a-zA-Z]{3}|[0-9a-zA-Z]{6})$/g;
