@@ -73,5 +73,35 @@ const obj = {
 // 试试跟操作上面的数组一样，调用next方法
 ```
 
+对象 prototype 上具有 Symbol.iterator 接口同样代表着对象可遍历
+
+```js
+class RangeIterator {
+    constructor(start, stop) {
+        this.value = start;
+        this.stop = stop;
+    }
+
+    [Symbol.iterator]() { return this; }
+
+    next() {
+        var value = this.value;
+        if (value < this.stop) {
+            this.value++;
+            return {done: false, value: value};
+        }
+        return {done: true, value: undefined};
+    }
+}
+
+function range(start, stop) {
+    return new RangeIterator(start, stop);
+}
+
+for (var value of range(0, 3)) {
+    console.log(value); // 0, 1, 2
+}
+```
+
 
 
