@@ -5,3 +5,4 @@
 - webpack 配置 `node` 端打包配置文件的时候可以设置 `target` 为 `node`
 - webpack 默认会将node文件中需要引入的 node 核心代码打包到 `bundle.js` 中，借助 `webpack-node-externals` 可以避免
 - 合理使用包 `npm-run-all` 来并行执行多条 `npm script`
+- 同构，意在同，必须保证服务端渲染的模板与客户端是一致的，才能够成功绑定事件

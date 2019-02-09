@@ -3,10 +3,11 @@ const app = express();
 
 import React, { Component } from 'react';
 import { renderToString } from 'react-dom/server';
-import Home from '../containers/Home';
+// import Home from '../containers/Home';
+import Counter from '../containers/Counter';
 
 app.get('/', function (req, res) {
-    const htmlStr = renderToString(<Home />);
+    const htmlStr = renderToString(<Counter />);
     console.log(htmlStr);
 
     res.send(`
