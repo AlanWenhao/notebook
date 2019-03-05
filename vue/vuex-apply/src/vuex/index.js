@@ -1,4 +1,30 @@
-let Vue;
+class ModuleCollection {
+    constructor(options) { // [] 代表跟模块，[a] 代表字母快，[a,b] 代表子模块 a 中有 孙模块 b
+        this.register([], options);
+    }
+    register(path, rawModule) {
+        let newModule = {
+            _raw: rawModule, // 当前模块的store
+            _children: {}, // 包含的子模块
+            state: rawModule.state // 当前面模块的状态
+        }
+        if (path.length === 0) { // 根模块
+            this.root = newModule;
+        } else { // 将子模块挂在父的 _children 上，使用 reduce 动态找出每个根，并在下一步给每个根加上children
+            let parent = path.slice(0, -1).reduce((root, current) => {
+                return root._children[current]
+            }, this.root);
+            // 给每个根加上children
+            parent._children[path[path.length - 1]] = newModule;
+        }
+
+        if (rawModule.modules) { // 有子模块
+            forEach(rawModule.modules, (childName, module) => {
+                this.register(path.concat(childName), module); // 递归调用 register，如果有子模块，将会进入上个判断的 else
+            });
+        }
+    }
+}
 
 class Store { // state getters actions mutations
     constructor(options) {
@@ -13,6 +39,12 @@ class Store { // state getters actions mutations
                 state
             }
         });
+
+        // 整理模块 module 关系
+        this.modules = new ModuleCollection(options);
+        console.log(this.modules);
+
+
         if (options.getters) {
             let getters = options.getters;
             forEach(getters, (getterName, getterFn) => {
@@ -66,6 +98,7 @@ class Store { // state getters actions mutations
     }
 }
 
+let Vue;
 const install = (_Vue) => {
     Vue = _Vue; // 保留构造函数，为了避免用户多次use vuex 而多次执行
     Vue.mixin({ // 给所有的 vue 组件都混入了下面的方法
