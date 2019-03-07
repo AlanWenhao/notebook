@@ -26,6 +26,32 @@ class ModuleCollection {
     }
 }
 
+function installModule(store, rootState, path, rootModule) {
+    if (rootModule._raw.getters) {
+        forEach(rootModule._raw.getters, (getterName, getterFn) => {
+            Object.defineProperty(store.getters, getterName, {
+                get: () => getterFn(rootModule.state) // 这里保证传入的state都是当前 module 下的
+            });
+        });
+    }
+    if (rootModule._raw.actions) {
+        forEach(rootModule._raw.actions, (actionName, actionFn) => {
+            let entry = store.actions[actionName] || (store.actions[actionName] = []);
+            entry.push(() => {
+                actionFn.call(store, store);
+            });
+        });
+    }
+    if (rootModule._raw.mutations) {
+        forEach(rootModule._raw.mutations, (mutationName, mutationFn) => {
+            let entry = store.mutations[mutationName] || (store.mutations[mutationName] = []);
+            entry.push(() => {
+                mutationFn.call(store);
+            });
+        });
+    }
+}
+
 class Store { // state getters actions mutations
     constructor(options) {
         let state = options.state;
@@ -40,12 +66,15 @@ class Store { // state getters actions mutations
             }
         });
 
-        // 整理模块 module 关系
+        // 整理模块 module 关系，使 vuex 的 state 形成一个树状结构，而 mutations 则是平行关系
         this.modules = new ModuleCollection(options);
-        console.log(this.modules);
 
+        /**
+         * 从根模块开始注册模块
+         */
+        installModule(this, state, [], this.modules.root);
 
-        if (options.getters) {
+        /* if (options.getters) {
             let getters = options.getters;
             forEach(getters, (getterName, getterFn) => {
                 Object.defineProperty(this.getters, getterName, {
@@ -70,11 +99,11 @@ class Store { // state getters actions mutations
                 // 这里给 actionFn 传入的参数是 this，所以在 store.js 中需要解构传入 { commit }
                 actionFn.call(this, this);
             }
-        });
+        }); */
 
         // 这里先拿到原型上的方法 commit 与 dispatch，然后再在【实例】上重写 commit 与 dispatch 方法，原因在于：
         // 重写之后，实例调用上面的两个方法，会优先选择实例上的方法而不是原型上的方法
-        // 重写之后可以绑定this。 因为在 store.js 中，action 中直接调用 commit 没有上下文，而这里可以将上下文绑定为【实例】store
+        // 重写之后可以绑定this。 这么做是因为在 store.js 中，action 中直接调用 commit 没有上下文，而这里可以将上下文绑定为【实例】store
         let { commit, dispatch } = this;
         console.log(commit);
         console.log(dispatch);
@@ -90,11 +119,10 @@ class Store { // state getters actions mutations
         return this._vm.state;
     }
     commit(type) {
-        console.log(this);
-        this.mutations[type]();
+        this.mutations[type].forEach(fn => fn());
     }
     dispatch(type) {
-        this.actions[type]();
+        this.actions[type].forEach(fn => fn());
     }
 }
 

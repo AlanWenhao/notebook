@@ -2,7 +2,7 @@
   <div id="app">
     <button @click="plus">+</button>
     <div>{{this.$store.state.count}}</div>
-    <div>{{this.$store.getters.newCount}}</div>
+    <!-- <div>{{this.$store.state.a.count}}</div> -->
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     plus() {
-      this.$store.dispatch('change');
+      this.$store.commit('change');
     }
   }
 }
