@@ -105,8 +105,6 @@ class Store { // state getters actions mutations
         // 重写之后，实例调用上面的两个方法，会优先选择实例上的方法而不是原型上的方法
         // 重写之后可以绑定this。 这么做是因为在 store.js 中，action 中直接调用 commit 没有上下文，而这里可以将上下文绑定为【实例】store
         let { commit, dispatch } = this;
-        console.log(commit);
-        console.log(dispatch);
         this.commit = (type) => {
             commit.call(this, type);
         }
