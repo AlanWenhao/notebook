@@ -27,6 +27,15 @@ class ModuleCollection {
 }
 
 function installModule(store, rootState, path, rootModule) {
+
+    if (path.length > 0) { // 
+
+        let parent = path.slice(0,-1).reduce((root, current) => {
+            return root[current];
+        }, rootState)
+        Vue.set(parent, path[path.length - 1], rootModule.state);
+    }
+
     if (rootModule._raw.getters) {
         forEach(rootModule._raw.getters, (getterName, getterFn) => {
             Object.defineProperty(store.getters, getterName, {
@@ -38,7 +47,7 @@ function installModule(store, rootState, path, rootModule) {
         forEach(rootModule._raw.actions, (actionName, actionFn) => {
             let entry = store.actions[actionName] || (store.actions[actionName] = []);
             entry.push(() => {
-                actionFn.call(store, store);
+                actionFn.call(store, rootState);
             });
         });
     }
@@ -46,10 +55,13 @@ function installModule(store, rootState, path, rootModule) {
         forEach(rootModule._raw.mutations, (mutationName, mutationFn) => {
             let entry = store.mutations[mutationName] || (store.mutations[mutationName] = []);
             entry.push(() => {
-                mutationFn.call(store);
+                mutationFn.call(store, rootModule.state);
             });
         });
     }
+    forEach(rootModule._children, (childName, module) => {
+        installModule(store, rootState, path.concat(childName), module);
+    });
 }
 
 class Store { // state getters actions mutations
@@ -70,7 +82,7 @@ class Store { // state getters actions mutations
         this.modules = new ModuleCollection(options);
 
         /**
-         * 从根模块开始注册模块
+         * 从根模块开始注册模块，挂在每层的state
          */
         installModule(this, state, [], this.modules.root);
 
@@ -111,7 +123,6 @@ class Store { // state getters actions mutations
         this.dispatch = (type) => {
             dispatch.call(this, type)
         };
-        
     }
     get state() { // 类似于 Object.defineProperty 中的 get
         return this._vm.state;

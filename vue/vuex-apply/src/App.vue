@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <button @click="plus">+</button>
+    <button @click="plus10">+10</button>
+    <button @click="plus100">+100</button>
     <div>{{this.$store.state.count}}</div>
-    <!-- <div>{{this.$store.state.a.count}}</div> -->
+    <div>{{this.$store.state.a.count}}</div>
+    <div>{{this.$store.state.a.b.count}}</div>
   </div>
 </template>
 
@@ -14,8 +16,12 @@ export default {
     console.log('App mounted', this.$store);
   },
   methods: {
-    plus() {
+    plus10() {
       this.$store.commit('change');
+      console.log(this.$store);
+    },
+    plus100() {
+      this.$store.dispatch('change');
     }
   }
 }
