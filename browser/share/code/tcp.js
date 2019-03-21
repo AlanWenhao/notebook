@@ -3,13 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 const destPort = 80;
-const destHost = '60.12.217.41';
+const destHost = '120.24.156.16';
 
 let allBuffer = null;
 
 const client = net.createConnection(destPort, destHost, function() {
     console.log('connect to server');
-    client.write('GET / HTTP/1.0/r/nAccept: text/html/r/nCache-Control: no-cache/r/nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36/r/n/r/n');
+    client.write('GET / HTTP/1.0\r\nAccept: text/html\r\nHost: zakwu.me\r\nCache-Control: no-cache/r/nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36\r\n\r\n');
 });
 
 client.on('data', function(data) {
@@ -17,7 +17,7 @@ client.on('data', function(data) {
     if (!allBuffer) {
         allBuffer = data;
     } else {
-        allBuffer.concat([allBuffer, data]);
+        allBuffer = Buffer.concat([allBuffer, data]);
     }
 });
 
