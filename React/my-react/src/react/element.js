@@ -2,6 +2,7 @@ class Element {
     constructor(type, props) {
         this.type = type;
         this.props = props;
+        this.key = props.key; // dom diff
     }
 }
 

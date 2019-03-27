@@ -1,11 +1,13 @@
 import $ from 'jquery';
 import createReactUnit from './unit';
 import createElement from './element';
+import Component from './component';
 
 let React = {
     nextRootIndex: 0, // 下一个根节点的索引号
     render,
-    createElement
+    createElement,
+    Component
 };
 
 function render(element, container) {
@@ -16,7 +18,7 @@ function render(element, container) {
     let markup = unitInstance.getMarkup(React.nextRootIndex);
     console.log(markup);
     $(container).html(markup);
-    // $(document).trigger('mounted'); // 触发一个自定义事件mounted，因为在getMarUp方法里不同的组件都会监听mounted
+    $(document).trigger('mounted'); // 触发一个自定义事件mounted，因为在getMarUp方法里不同的组件都会监听mounted
 }
 
 export default React;
