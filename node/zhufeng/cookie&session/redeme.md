@@ -1,5 +1,5 @@
-cookie & session
-nodejs 中通过 req.headers.cookie 获取请求头的cookie，可以看到cookie是存放在 __请求头__ 中的
+# cookie & session
+> nodejs 中通过 req.headers.cookie 获取请求头的cookie，可以看到cookie是存放在 __请求头__ 中的
 
 ## 参数
 - name 名称
