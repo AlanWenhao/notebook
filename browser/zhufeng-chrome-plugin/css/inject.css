@@ -1,0 +1,12 @@
+.nav ul {
+	background: #20232a;
+}
+
+.nav ul:hover {
+	height: auto;
+}
+
+body .nav ul li {
+	min-width: 220px;
+	line-height: 26px;
+}

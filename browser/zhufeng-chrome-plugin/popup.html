@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>popup页</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+	}
+	.popup-box {
+		width: 300px;
+		padding: 2px;
+	}
+	.popup__title {
+		margin: 10px 0;
+		text-align: center;
+	}
+	.popup__btn-wrap {
+		padding-bottom: 10px;
+		text-align: center;
+	}
+	.popup__btn {
+		display: inline-block;
+	}
+	.popup__info p {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	</style>
+</head>
+<body>
+	<div class="popup-box">
+		<p class="popup__title">饿了么短信模板</p>
+		<div class="popup__info">
+			<p class="text-primary">· 获取待上传模板可以手动上传或拒绝</p>
+			<p class="text-primary">· 获取上传模板后，需要等待130s更新状态</p>
+			<p class="text-primary">· 建议 F12 打开控制台，查看 log 日志</p>
+		</div>
+		<div class="popup__btn-wrap">
+			<a class="popup__btn btn btn-info" href="#" id="open_background">打开后台页面</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="js/popup.js"></script>
+</body>
+</html>

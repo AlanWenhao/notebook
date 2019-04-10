@@ -1,10 +1,8 @@
-function count(arr, item) {
-    const newArr = arr.filter((val) => {
-        return item === val;
-    });
-    return newArr.length;
+function sum(arr) {
+    let sumNumber = 0;
+   arr.forEach(item => {
+        sumNumber += item   
+   });
+    return sumNumber;
 }
-const arr = [1,2,4,4,3,4,3];
-const result = count(arr, 4);
-console.log(result);
-console.log(arr);
+console.log(sum([1,2,3,4]));
