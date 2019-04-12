@@ -1,5 +1,7 @@
 # JavaScript 能力测评经典题
-
+- slice 返回从begin到end的浅拷贝新数组，包前不包后。begin、end均为可选
+- splice 注意参数，既可以作为删除元素使用，也可以作为添加元素使用，返回被删除的元素组成的数组
+- ` arr.slice(0)` 和 `arr.splice(0)`分别作用是什么
 ## 数组部分
 > 找出 item 在给定数组arr中的位置,否则返回-1  
 > 输入：[1,2,3,4], 3  
@@ -108,7 +110,7 @@ function truncate(arr, item) {
 }
 ```
 
-> 在数组 arr 开头添加元素 item。不要直接修改数组 arr，结果返回新的数组  
+> 删除数组的第一个元素，结果返回新的数组  
 ```js
 function prepend(arr, item) {
     const newArr = arr.concat();
@@ -127,7 +129,7 @@ function prepend(arr, item) {
 }
 ```
 
-> 在数组 arr 开头添加元素 item。不要直接修改数组 arr，结果返回新的数组  
+> 删除数组开头元素，结果返回新的数组  
 ```js
 function curtail(arr) {
     var newArr = arr.slice();
@@ -198,4 +200,38 @@ function count(arr, item) {
     return newArr.length;
 }
 ```
+
+> 找出数组 arr 中重复出现过的元素
+```js
+function duplicates(arr) {
+    return arr.sort().filter((item, index) => {
+        return item === arr[index + 1] && item !== arr[index - 1];
+    });
+}
+```
+
+> 为数组 arr 中的每个元素求二次方。不要直接修改数组 arr，结果返回新的数组
+```js
+function square(arr) {
+    return arr.map(item => item * item);
+}
+```
+
+> 在数组 arr 中，查找值与 item 相等的元素出现的所有位置
+```js
+function findAllOccurrences(arr, target) {
+    return arr.filter((item, index) => {
+        if (item === target) return index;
+    });
+}
+```
+
+> 编写函数 parseInt2，使之通过全部测试用例 '12' => 12, '12px' => 12, '0x12' => 0
+```js
+function parse2Int(num) {
+    return parseInt(num, 10);
+}
+```
+
+
 
