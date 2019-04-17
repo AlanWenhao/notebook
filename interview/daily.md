@@ -154,3 +154,27 @@ console.log(p2.eg);                   // 'xx'
 > - 不可以当作构造函数, 也就是说不可以使用 new 命令, 否则会抛出一个错误;
 > - 不可以使用 arguments 对象, 该对象在函数体内不存在. 如果要用, 可以用 Rest 参数代替;
 > - 不可以使用 yield 命令, 因此箭头函数不能用作 Generator 函数;
+
+## 谈谈JS中类型转换的规则
+[参考链接](https://javascript.ruanyifeng.com/grammar/conversion.html#)
+> 转化规则可以分为`强制转换`与`自动转换`  
+> 强制转换主要使用三种方法：`Number()`, `String` 和 `Boolean`，分别转化为数字字符串与布尔。  
+> - `Number` 方法:
+>   - 转化`number`、`string`类型的number和单个数值的数组为数字。
+>   - 转化空字符串、null、false为0。转化其他均为·`NaN`。
+>   - 相对于 parseInt而言是很严格的  
+> - `String` 方法：
+>   - 数值：相应字符串
+>   - 字符串：不变
+>   - 布尔值：'true' 或 'false'
+>   - undefined: 'undefined'
+>   - null: 'null'
+>   - 对象：一般为 '[object object]', 本质上是依次调用对象自身的`toString`与`valueof`方法，一返回原始类型，则返回原始类型的string值，如果都没有返回原始类型，则报错。
+> - `Boolean` 方法：可以将任意类型的值转化为布尔值
+>   - `undefined`, `null`, `0`, `NaN`, `''` 均为 `false`，其余均为 `true`  
+
+> 自动转化的规则：预期什么类型的值，就调用改类型的转换函数。
+> - 自动转换，分为三种情况，他的转换规则是以强制转换为基础的
+>   - 不同类型的数据相互计算
+>   - 对非布尔值类型的数据求布尔值
+>   - 对非数值类型的值使用一元运算（+ 和 -）
