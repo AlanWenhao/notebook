@@ -6,6 +6,7 @@
  */
 function after(times, callback) {
     const arr = [];
+    console.log('当前的arr', arr);
     return function(data) {
         arr.push(data);
         if (arr.length === times) callback();
