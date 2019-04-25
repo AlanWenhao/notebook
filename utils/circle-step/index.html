@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    * { margin: 0; padding: 0; }
+    .container {
+        width: 600px;
+        margin: 0 auto;
+    }
+    .line {
+        display: flex;
+    }
+    .cell {
+        flex: 1;
+        margin: 5px;
+        height: 100px;
+        background: lightblue;
+    }
+    .white {
+        flex: 1;
+        margin: 5px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        font-size: 40px;
+        background: lightblue;
+        background: #fff;
+        cursor: pointer
+    }
+    .cell.active { background: lightgreen; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="line">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="line">
+            <div class="cell"></div>
+            <div class="white">点击</div>
+            <div class="cell"></div>
+        </div>
+        <div class="line">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>

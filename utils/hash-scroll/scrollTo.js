@@ -12,7 +12,7 @@ document.addEventListener('click', function (event) {
 		if (target) {
 			event.preventDefault();
 
-			scrollTo(target, 300, easing, function () {
+			scrollTo(target, 2000, easing, function () {
 				location.hash = closestHash.hash;
 			});
 		}
