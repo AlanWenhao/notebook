@@ -232,3 +232,10 @@ console.log(p2.eg);                   // 'xx'
 > 接下来说原型，在JS中每当定义一个函数的时候，都会天生自带一个`prototype`属性，这个属性指向函数的原型对象。原型对象就相当于一个公共的区域，所有实例都可以访问到这个原型对象。  
 
 > 接下来说原型链，每个对象也天生自带一个属性`__proto__`，这个对象包括普通对象，实例，与prototype。`__proto__`的属性值指向当前实例所属类的`prototype`。原型对象中有一个属性`constructor`指向构造函数。在JS中万物都是对象，对象与对象之间是有关系的，并不是孤立存在的。对象之间的继承关系，是通过`prototype`对象指向父类对象，知道指向Object位置，这样就形成了一个原型指向的链条，称之为原型链。
+
+# typeof 和 instanceof 的区别
+> typeof 是一个一元运算，它返回值是一个字符串，该字符串说明运算数的类型。  
+> typeof 一般只能返回如下几个结果："number"、"string"、"boolean"、"object"、"function" 和 "undefined"。  
+> 在 JavaScript 中，判断一个变量的类型尝尝会用 typeof 运算符，在使用 typeof 运算符时采用引用类型存储值会出现一个问题，无论引用的是什么类型的对象，它都返回 “object”。这就需要用到instanceof来检测某个对象是不是另一个对象的实例。  
+
+> instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链上。
