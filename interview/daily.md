@@ -262,3 +262,24 @@ console.log(p2.eg);                   // 'xx'
 
 > JS的作用域分为全局作用域与函数作用域，函数的创建会创建闭包，在函数内部可以引用与访问这个函数创建时候的作用域中的变量，级级向上形成作用域链
 
+## 数组乱序算法
+> 参考 [数组乱序文章](https://blog.oldj.net/2017/01/23/shuffle-an-array-in-javascript/)  
+
+```js
+// 不要使用这种方法，这种随机在数组长度10以内与以外是不同的，且都不是等概率随机
+function shuffle(arr) {
+    arr.sort(() => Math.random() - 0.5);
+}
+```
+
+```js
+// 推荐使用Fisher–Yates shuffle，与lodash实现一致
+function shuffle(arr) {
+    let i = arr.length;
+    while (i) {
+        let j = Math.floor(Math.random() * i--);
+        [arr[j], arr[i]] = [arr[i], arr[j]];
+    }
+}
+```
+
