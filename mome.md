@@ -104,3 +104,53 @@ echo $name $gender $password
     - `declare -p` 输出所有声明的变量，包括用户定义的与系统变量 `declare -p sum` 则是查询sum变量被声明的类型
 - 环境变量（任务60），23：00，回看！！！
     - 各个文件有各自的任务，在用户登录后一次执行，比如想要改环境变量path，那就更改 `bash_profile` 文件，因为他负责这个的，其实这几个文件的哪个都行，毕竟都要执行
+
+## 19-4-30
+- 通配符只有是三个 ？ * []
+- grep 使用正则、awk使用正则
+
+```bash
+grep "a*" hellow.txt # 匹配0个或多个a
+grep "\." hellow.txt # 匹配.
+greo "a[obc]\{1,2\}p" # 匹配ap结尾中间有一到两个字符，是obc，注意大括号需要转义
+```
+
+- cut 提取文本，默认分隔符是 tab ，可以通过 -d 指定分隔符， -f 指定分割后的第几列
+
+- printf
+```
+printf "%s\n" abc def
+printf "%1s\n" abc def
+printf "%5s\n" abc def
+printf printf "%6.2f\n"
+```
+
+问题：
+> df -h 可以查看磁盘信息，如果想要取得已用的百分比，使用 cut 命令应该怎么提取，可以先用printf格式化，然后cut截取出
+```bash
+# 其中 $() 包裹的是执行的命令
+printf "%s\t%s\t%s\t%s\t%s\t%s\n" $(df -h | grep /dev/disk0s2) | cut -f 5
+
+# 去掉百分号，也就是说根据 % 在分割一下
+printf "%s\t%s\t%s\t%s\t%s\t%s\n" $(df -h | grep /dev/disk0s2) | cut -f 5 | cut -d % -f 1
+```
+
+- awk
+```bash
+# 使用 awk 完成上题
+df -h | grep /dev/disk0s2 | awk '{print $5}' # 这里必须是双引号
+```
+
+- begin end
+```bash
+# 有一个文件number.txt如下，一共三行，每行是一个数字，想要通过一条命令求这个文件各行数字的和
+1
+2
+3
+
+# 命令如下
+awk 'BEGIN{sum=0}{sum=sum+$1}END{print sum}' number.txt
+```
+
+- FS 指定分隔符
+- awk跟sed区别，课时60，1:45
