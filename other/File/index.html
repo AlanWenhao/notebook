@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文件对象</title>
+    <style>
+    p { margin: 0; }
+    .container { width: 500px;height: 400px;margin: 100px auto 0;border: 3px solid #999;border-radius: 10px; font-size: 30px;color: #999;line-height: 400px;text-align: center; }
+    .previewer-box { width: 560px;margin: 30px auto 0; }
+    .previewer { display: inline-block;width: 100px;padding: 10px;margin: 10px; }
+    .previewer img { width: 100%;margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">拖拽上传图片</div>
+    <div class="previewer-box"></div>
+
+    <script>
+    const container = document.querySelector('.container');
+    const previewerBox = document.querySelector('.previewer-box');
+    
+    let str = '';
+
+    document.addEventListener('drop', function(e) { e.preventDefault() }, false);
+    document.addEventListener('dragenter', function(e) { e.preventDefault() }, false);
+    document.addEventListener('dragover', function(e) { e.preventDefault() }, false);
+
+    document.addEventListener('click', previewImage, false);
+
+    container.addEventListener('drop', function(e) {
+        e.preventDefault();
+        console.log(e);
+        const fileList = e.dataTransfer.files;
+        if (fileList.length == 0) {
+            return false;
+        }
+
+        if (fileList.length > 1) return alert('请上传单个文件');
+
+        if (!/image/.test(fileList[0].type)) return alert('请上传图片');
+
+        const img = window.webkitURL.createObjectURL(fileList[0]);
+        str += `<div class="previewer"><img src="${img}"><p>${fileList[0].name}</p><p>${Math.floor(fileList[0].size / 1024)}kb</p></div>`
+        previewerBox.innerHTML = str;
+    }, false);
+
+    function previewImage(e) {
+        if (e.target.nodeName !== 'IMG') return false;
+    }
+    </script>
+</body>
+</html>
