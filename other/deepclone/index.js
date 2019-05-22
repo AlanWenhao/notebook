@@ -76,3 +76,25 @@ function deepClone2(source) {
 // console.log('origin', originObj);
 // console.log('target', targetObj);
 
+/**
+ * 深拷贝，解决循环引用的问题，如果两个值引用，同一个值，这个引用关系在拷贝后也不会被破坏
+ * @param {Any} source 
+ * @param {Map} hash 
+ */
+function deepClone3(source, hash = new WeakMap()) {
+    if (!isObject(source)) return source;
+    if (hash.has(source)) return hash.get(source);
+
+    var target = Array.isArray(source) ? [] : {};
+    hash.set(source, target);
+    for (key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+            if (isObject(source[key])) {
+                target[key] = deepClone3(source[key], hash);
+            } else {
+                target[key] = source[key];
+            }
+        }
+    }
+    return target;
+}
