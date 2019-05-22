@@ -283,3 +283,8 @@ function shuffle(arr) {
 }
 ```
 
+## Why use `Object.prototype.hasOwnProperty.call(obj, key)` rather than `obj.hasOwnProperty(key)` ？
+
+> 虽然 `hasOwnProperty` 是 Object 原型对象上的方法，会继承给每一个Object实例，但是存在下面两种情况，obj 不会拥有或不拥有与其的 `hasOwnProperty` 方法
+> - 通过 Object.create(null) 创建的对象，没有 prototype
+> - 自定义了 hasOwnProperty 方法的对象
