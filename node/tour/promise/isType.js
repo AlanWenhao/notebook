@@ -26,3 +26,16 @@ TypeArr.forEach((item) => {
 });
 
 module.exports = util;
+
+
+Promise.resolve().then(data => {
+    console.log('p1');
+    setTimeout(() => {
+        console.log('定时器2');
+    }, 0)
+});
+
+setTimeout(() => {
+    console.log('定时器1');
+}, 0);
+
