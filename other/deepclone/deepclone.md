@@ -1,43 +1,7 @@
-/**
- * 浅拷贝
- * @param {Object} obj 克隆的对象
- */
-function cloneShdow(obj) {
-    var target = {};
-    for (key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            target[key] = obj[key];
-        }
-    }
-    return target;
-}
+# 深拷贝
 
-/**
- * 深拷贝（对null的处理有问题）
- * @param {Object} obj 深拷贝的对象
- */
-function deepClone(obj) {
-    var target = {};
-    for (key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            if (typeof obj[key] === 'object') {
-                target[key] = deepClone(obj[key]);
-            } else {
-                target[key] = obj[key];
-            }
-        }
-    }
-    return target;
-}
-
-/**
- * 是否是对象，不区分 array 与 object
- * @param {Any} value 要判断的值
- */
-function isObject(value) {
-    return typeof value === 'object' && value !== 'null';
-}
-
+## 传统迭代的深拷贝
+```js
 /**
  * 深拷贝，兼容数组与对象，对null进行处理
  * @param {Any} source 
@@ -80,3 +44,20 @@ function deepClone3(source, hash = new WeakMap()) {
     }
     return target;
 }
+
+```
+
+## 三种方式
+### JSON.parse(JSON.stringify(obj))
+缺点：仅能拷贝对象与数组，且其中的 undefined与null无法区分，循环引用也无法处理
+
+### 迭代递归的方法，使用`for...in`
+确点：无法拷贝：function、date、reg 和 err，因为他们有特殊的构造函数
+
+### reflect
+- Reflect 是一个内置的对象，它提供拦截 JavaScript 操作的方法
+- `Reflect.ownKeys(cloneObj).forEach()`
+
+## 解决循环引用的方式：
+- 设置一个 hash 表，比如 `hash = new WeakMap`
+
