@@ -38,8 +38,9 @@ class Server {
         
         try { // 判断当前目录是否存在,如果是路径，显示路径,如果是文件，显示文件
             const statObj = await stat(localPath);
+            console.log(statObj);
             if (statObj.isDirectory()) { // 判断是否是文件夹
-                const dirs = await readdir(localPath);
+                const dirs = await readdir(localPath); // 得到当前目录下的文件或文件夹，类似 ls
                 const dirsArr = dirs.map(dir => {
                     return {
                         name: dir,
