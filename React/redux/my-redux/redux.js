@@ -81,6 +81,7 @@ store.subscribe(render);
 // 取消订阅
 // setTimeout(() => {
 //     store.subscribe(render)();
+//     alert('取消订阅);
 // }, 5000);
 
 setInterval(() => {
