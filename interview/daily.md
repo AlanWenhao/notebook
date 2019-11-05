@@ -324,3 +324,7 @@ Promise.all(promiseArr).then(resArr => {
     - 共同点：`async` 与 `defer` 都不会阻塞页面的渲染
     - 区别：`async` 是`加载顺序优先`，`defer` 是执行顺序优先
     - 使用原则：如果加载的外部脚本依赖一定的执行顺序，使用`defer`，如果是相互不依赖执行顺序的外部脚本，可以使用 `async`
+
+## 有时候为什么会选择 `WeakMap` 或者 `WeakSet` 而不是 `Map` 或者 `Set`
+- 本身的区别
+- 垃圾回收的不同机制
