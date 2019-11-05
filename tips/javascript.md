@@ -138,7 +138,7 @@ Set实例方法
     - **特别指出，Set的遍历顺序就是插入顺序**
     - **由于Set结构没有键名只有键值，所以keys方法与values方法的行为完全一致**
 
-Set 遍历举例
+### Set 遍历举例
 ```js
 for (let item of set.entries()) {
   console.log(item);
@@ -162,7 +162,7 @@ for (let x of set) {
 // blue
 ```
 
-Set结合扩展运算符...之后可以使用任意的数组方法，因此，实现交集、并集、差集
+### Set结合扩展运算符...之后可以使用任意的数组方法，因此，实现交集、并集、差集
 ```js
 let a = new Set([1, 2, 3]);
 let b = new Set([4, 3, 2]);
@@ -178,4 +178,72 @@ let intersect = new Set([...a].filter(x => b.has(x)));
 // 差集
 let difference = new Set([...a].filter(x => !b.has(x)));
 // Set {1}
+```
+
+### 扩展运算符细节
+> 复制对象自身的的可枚举属性  
+> rest 剩余属性
+
+```js
+// 仅可以复制 可枚举属性（enumerable: true）
+const car = {
+  color: 'blue'
+};
+
+Object.defineProperty(car, 'type', {
+  value: 'coupe',
+  enumerable: false
+});
+
+console.log({...car});    // → {color: "blue"}
+
+// 继承的属性即使是可枚举的也会被忽略，例如使用 Object.create 方式继承的对象
+
+const car2 = Object.create(car, {
+  type: {
+    value: 'bmw',
+    enumerable: true,
+  }
+})
+console.log({...car2}); // { type: 'bmw' }
+
+// 剩余参数 rest，数组对象一样适用，rest 必须出现在末尾
+const arr = [10, 20, 30];
+const [x, ...rest] = arr;
+console.log(x);       // → 10
+console.log(rest);    // → [20, 30]
+```
+
+### Promise 的finaly
+
+> finaly 方法提供不论在promise成功与否都会进入的任务
+
+```js
+fetch('https://www.google.com')
+  .then((response) => {
+    console.log(response.status);
+  })
+  .catch((error) => { 
+    console.log(error);
+  })
+  .finally(() => { 
+    document.querySelector('#spinner').style.display = 'none';
+  });
+```
+
+### 模板文字修订
+> 可以接收函数逻辑
+
+```js
+function fn(string, substitute) {
+  if(substitute === 'ES6') {
+    substitute = 'ES2015'
+  }
+  return substitute + string[1];
+}
+
+const version = 'ES6';
+const result = fn${version} was a major update;
+
+console.log(result);    // → ES2015 was a major update
 ```
