@@ -247,3 +247,25 @@ const result = fn${version} was a major update;
 
 console.log(result);    // → ES2015 was a major update
 ```
+
+> koa 的 compose 函数，this.middlewares 是包含 `(ctx, next) => { ...  next() }` 的数组
+```js
+compose(ctx) {
+  // [fn,fn,fn]
+  // async + await  / reduce + compose
+  let dispatch = (index) => {
+      if (index == this.middlewares.length) return Promise.resolve();// 返回一个成功的 
+      let middle = this.middlewares[index];
+      // 拿出第一个中间件 让其执行，执行的时候传递ctx,next方法，有可能这个方法是一个普通函数，那么就把他变成一个promise
+      return Promise.resolve(middle(ctx, () => dispatch(index + 1)));
+  }
+  return dispatch(0);
+}
+```
+
+> 两者的共同点  
+> - 假如参数是包含函数的数组，这些函数序号分别是 1、2、3  
+> - 那么经过 compose 函数后，就将会变成 1 包裹 2，2 包裹 3  
+> 不同点在于  
+> - `koa` 需要手动调用 `next` 方法来一步一步执行，而 `redux` 则会直接执行  
+> - `koa` 返回的是 `Promise` ，可以更好的书写异步代码

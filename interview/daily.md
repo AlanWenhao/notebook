@@ -328,3 +328,26 @@ Promise.all(promiseArr).then(resArr => {
 ## 有时候为什么会选择 `WeakMap` 或者 `WeakSet` 而不是 `Map` 或者 `Set`
 - 本身的区别
 - 垃圾回收的不同机制
+
+## redux 源码的 compose 与 koa 源码的 compose
+> redux 版本例子
+```js
+function add1(str) {
+    return '1' + str;
+}
+function add2(str) {
+    return '2' + str;
+}
+function add3(str) {
+    return '3' + str;
+}
+
+function compose(...funcs) {
+    if (funcs.length === 0) return args => args
+    if (funcs.length === 1) return funcs[0]
+    return funcs.reduce((func, next) => (...args) => func(next(...args))) 
+}
+
+const result = compose(add1, add2, add3)('test');
+console.log(result);
+```
