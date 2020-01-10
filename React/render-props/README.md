@@ -37,7 +37,7 @@ class Child extends React.Component({
     return (
       <div>
         鼠标当前的位置是：{this.props.x}，{this.props.y}
-      <div>
+      </div>
     )
   }
 });
