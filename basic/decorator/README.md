@@ -155,3 +155,5 @@ class Man {
 ```
 
 **作用在方法上的 decorator 接收的第一个参数（target ）是类的 prototype；如果把一个 decorator 作用到类上，则它的第一个参数 target 是 类本身。**
+
+## 推荐使用库 `core-decorators` 里面有一些常用的装饰器以提供使用

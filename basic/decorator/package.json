@@ -19,7 +19,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp && node gulpdist/index.js"
+    "gulp": "gulp && node gulpdist/index.js",
+    "start": "webpack --mode=development && node dist/bundle.js"
   },
   "keywords": [],
   "author": "",
