@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato);
+
+        body {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-family: Lato, sans-serif;
+            background: #040a22;
+        }
+
+        .glass {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .card {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            color: white;
+
+        }
+
+        .card::before,
+        .card::after {
+            position: absolute;
+            content: "";
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+        }
+
+        .card::before {
+            z-index: -1;
+            background: #040a22;
+        }
+
+        .card::after {
+            --gradientColor1: #09ec3a;
+            --gradientColor2: #040c27;
+            --gradientColor3: #37a5ee;
+            z-index: -2;
+            background: linear-gradient(235deg,
+                    var(--gradientColor1),
+                    var(--gradientColor2),
+                    var(--gradientColor3));
+            filter: blur(40px);
+            animation: glow 4s linear infinite;
+        }
+
+        .card-body {
+            padding: 20px;
+            color: white;
+        }
+
+        @keyframes glow {
+            50% {
+                --gradientColor1: rgba(9, 236, 58, 0.6);
+                --gradientColor2: rgba(4, 12, 39, 0.6);
+                --gradientColor3: rgba(55, 165, 238, 0.6);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="glass"></div>
+        <div class="card-body">
+            <h1>Sora</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+        </div>
+    </div>
+    <script>
+        console.log(window.CSS);
+        CSS.registerProperty({
+            name: "--gradientColor1",
+            syntax: '<color>',
+            inherits: true,
+            initialValue: "#09ec3a"
+        });
+
+        CSS.registerProperty({
+            name: "--gradientColor2",
+            syntax: '<color>',
+            inherits: true,
+            initialValue: "#040c27"
+        });
+
+        CSS.registerProperty({
+            name: "--gradientColor3",
+            syntax: '<color>',
+            inherits: true,
+            initialValue: "#37a5ee"
+        });
+    </script>
+</body>
+
+</html>
