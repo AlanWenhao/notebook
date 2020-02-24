@@ -53,7 +53,7 @@ function getValue(value: unknown): string {
 ```
 
 ## never
-> never 类型表示那些永远不存在的值的类型，`never` 类型是任何类型的子类型，也可以赋值给任何类型；然而**任何类型都不可以复制给never类型**，也没有任何类型是 `never` 的子类型
+> never 类型表示那些永远不存在的值的类型，`never` 类型是任何类型的子类型，也可以赋值给任何类型；然而**任何类型都不可以赋值给never类型**，也没有任何类型是 `never` 的子类型
 
 下面的两个场景 `never` 比较常出现
 ```ts
