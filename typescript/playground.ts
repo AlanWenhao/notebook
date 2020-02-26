@@ -1,4 +1,3 @@
-function returnArray<T> (data: Array<T>): Array<T> {
-    console.log(data.length);
-    return data;
+function factory<T> (type: {new(): T}): T {
+    return new type()
 }
