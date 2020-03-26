@@ -13,7 +13,7 @@
 		{
             "js": ["js/inject.js"],
             "css": ["css/inject.css"],
-			"matches": ["http://www.zhufengpeixun.cn/architecture/html/*"]
+			"matches": ["http://www.zhufengpeixun.cn/*"]
 		}
 	],
     "permissions": [],

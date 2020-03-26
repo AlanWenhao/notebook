@@ -1,3 +1,4 @@
 const target = document.querySelector('.nav').querySelector('ul');
 
-console.log(target.offsetHeight);
+logo.style.opacity = 0;
+
