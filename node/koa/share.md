@@ -1,4 +1,4 @@
-KOA 源码设计思路
+# Koa 源码设计思路
 
 ## 核心思想
 > - `ctx` 的封装与 `req`，`res` 的代理机制
@@ -34,3 +34,62 @@ app.use(async ctx => {
 
 app.listen(3000);
 ```
+
+## koa 源码设计整体思路
+
+![koa结构](./img/structure.jpg)
+
+- Koa是一个类，其上有属性 `middleware`、`context`、`request`、`response`
+  - context 每个请求都会创建一个 context 上下文，常用简写 ctx 
+  - context.request 上下文上具有 koa 封装的 request 方法，对原生的 req 做了一层封装
+  - context.response 上下文上具有 koa 封装的 response 方法，对原生的 res 做了一层封装
+
+- Koa的实例暴露了公用的方法 `use`、`listen`
+  - `use` 使用中间件
+  - `listen` 使用 `node` 原生 `http` 模块启动http服务
+
+- 每次访问 koa 服务，koa 都会将开发者通过 use 注册的中间件一一执行，且在执行中能够拿到 ctx 上下文
+  - 类似于原生 node 服务执行是，函数内部可以拿到原生的 req 与 res
+
+## Koa雏形
+
+```js
+const http = require('http');
+const context = {};
+const request = {};
+const response = {};
+
+class Application {
+  constructor() {
+    this.context = context;
+    this.request = request;
+    this.response = response;
+    this.callbackFn = null;
+  }
+
+  use(fn) {
+    this.callbackFn = fn;
+  }
+
+  callback() {
+    return (req, res) => this.callbackFn(req, res)
+  }
+
+  listen(...args) {
+    const server = http.createServer(this.callback());
+    return server.listen(...args);
+  }
+}
+
+module.exports = Application;
+```
+## ctx 中的代理
+
+### koa 自己的 request 与 response 代理 原生的 req 与 res
+- `request` 是一个对象，`koa/request` 文件中使用属性访问器 `get` 与 `set` 实现代理
+
+### ctx 代理 request 与 response
+
+
+### ctx
+[app-context](https://koa.bootcss.com/#app-context)

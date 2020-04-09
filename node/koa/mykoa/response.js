@@ -1,4 +1,4 @@
-let response = {
+const response = {
     _body:'',
     get body(){
         return this._body

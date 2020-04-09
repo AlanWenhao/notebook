@@ -3,7 +3,7 @@
 ## 基本
 - koa 是一个类，核心代码在`lib`下的application
 - 原生的使用的是 req 与 res，koa 自己封装了 request 与 response，并且封装了 ctx做了一个代理，代理了原生的与自己封装的request与response
-- 可以直接使用`ctx.heander`来获取请求头，或者使用其来设置头，自己封装的 request的属性与方法都能狗通过ctx直接访问
+- 可以直接使用`ctx.heander`来获取请求头，或者使用其来设置头，自己封装的 request的属性与方法都能够通过ctx直接访问
 - 可以直接使用 `ctx.get` 或 `request.get(field)` 来直接获取请求头的信息，其他功能参考官网
 - 在koa中`ctx.request.url`与`ctx.request.req.url` 是相同的
 

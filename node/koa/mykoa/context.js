@@ -1,6 +1,4 @@
-let context = {
-    
-}
+let context = {}
 
 // 代理的功能
 // Object.defineProperty(obj,'url',{
@@ -23,8 +21,8 @@ function defineSetter(property,key){
 defineGetter('request','url');
 defineGetter('request','method');
 defineGetter('request','path');
-defineGetter('response','body');
 
+defineGetter('response','body');
 defineSetter('response','body');
 // 实现代理功能
 module.exports = context;

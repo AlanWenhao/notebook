@@ -9,7 +9,7 @@ let request = {
     get method(){
         return this.req.method
     },
-    get path(){
+    get path(){ // koa 扩展的方法
         return url.parse(this.req.url).pathname
     }
 }
