@@ -28,7 +28,7 @@ const Koa = require('koa');
 const app = new Koa();
 
 app.use(async ctx => {
-  ctx.type = 'text/css; charset=utf-8';
+  ctx.type = 'text/plain; charset=utf-8';
   ctx.body = 'Hello World';
 });
 
@@ -84,12 +84,61 @@ class Application {
 module.exports = Application;
 ```
 ## ctx 中的代理
+> 一共有两个地方的代理  
+> 1、koa 自身 request 与 response 对 原生 req 与 res 的代理  `ctx.request.path`  
+> 2、ctx 上下文对于 request 与 response 的代理  `ctx.path`  
 
-### koa 自己的 request 与 response 代理 原生的 req 与 res
-- `request` 是一个对象，`koa/request` 文件中使用属性访问器 `get` 与 `set` 实现代理
+- koa 自己的 request 与 response 代理 原生的 req 与 res
+  - `request` 是一个对象，`koa/request` 文件中使用属性访问器 `get` 与 `set` 实现代理
+  - 例如访问器，我们访问 `request.path` 的时候，其实就是访问 `this.req.path` （这里的`this`指的是`context`）  
+- ctx 上的访问代理到 request 与 response
+  - 源码中使用了外部的库 `delegate`，其中的原理是 `__defineGetter` 与 `definedSetter`
+  - 使用上面的代理方法，其实类似于属性访问器与属性设置器，比如将 `ctx.path` 这个访问指到 访问 `ctx.request.path` (其实又指到了`req.path`)
 
-### ctx 代理 request 与 response
 
+## 中间件机制---洋葱模型
 
-### ctx
-[app-context](https://koa.bootcss.com/#app-context)
+![洋葱模型](./img/onion.png)
+
+首先梳理koa服务被创建与访问时候的经过，其核心逻辑在最后两步
+
+- 访问服务
+  - 注册中间件 `use(xxx)`
+  - 访问服务
+  - 进入 http 服务回调函数
+  - 创建上下文，创建 context、request、response 并形成代理关系
+  - compose 中间件，形成洋葱模型并执行该模型的逻辑
+
+### 洋葱模型实现核心函数 `compose`
+> 原理就是使用了 `柯里化` 与 `递归`  
+```js
+compose(ctx) {
+  let dispatch = (index) => {
+    let middle = this.middlewares[index];
+    return Promise.resolve(middle(ctx, () => dispatch(index + 1)));
+  }
+
+  return dispatch(0);
+}
+```
+
+### 洋葱模型的扩展---redux中的compose
+
+源代码（几年前的js实现）
+
+```js
+function compose(...funcs){
+  return funcs.reduce((a, b) => (...args) => a( b(...args) ));
+}
+```
+
+### 一些链接
+- [__defineGetter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineGetter__)
+- [__defineSetter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineGetter__)
+- [delegate](https://github.com/zenorocha/delegate#readme)
+- [lodash函数柯里化](https://www.lodashjs.com/docs/lodash.curry)
+- [柯里化函数curry的实现](https://github.com/AlanWenhao/notebook/blob/master/basic/coding-skill/aop/curry.js)
+- [koa-compose](https://github.com/koajs/compose#readme)
+- [redux compose](https://github.com/reduxjs/redux/blob/4.x/src/compose.js)
+- [自己的手写mykoa](https://github.com/AlanWenhao/notebook/tree/master/node/koa)
+- [koa，jwt，mysql实现的登录注册、增删改查、图片上传api服务](https://github.com/AlanWenhao/tour-backend)
