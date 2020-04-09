@@ -20,7 +20,7 @@ class Application extends EventEmitter {
         this.middlewares.push(fn);
     }
     createContext(req, res) {
-        // 不会破坏原有对象，方便扩展
+        // 不会破坏原有对象，方便扩展，比如用户使用koa的时候，在response上新加了自定义的属性，也不会影响原生的response
         let context = Object.create(this.context);
         context.request = Object.create(this.request);
         context.response = Object.create(this.response);
