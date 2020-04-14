@@ -1,15 +1,34 @@
-interface IAnyObj {
-    [prop: string]: any
+function method(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    console.log(target);
+    console.log("prop " + propertyKey);
+    console.log('descriptor是：', descriptor);
+    console.log("desc " + JSON.stringify(descriptor) + "\n\n");
+    descriptor.writable = false;
+};
+
+class Person{
+    name: string;
+    constructor() {
+        this.name = 'xiaomuzhu';
+    }
+
+    @method
+    say(){
+        return 'instance method';
+    }
+
+    @method
+    static run(){
+        return 'static method';
+    }
 }
 
-function mixin<T extends IAnyObj, U extends IAnyObj>(a: T, b: U): T & U {
-    const result = <T & U>{};
-    for(let key in a) {
-        (<T>result)[key] = a[key];
-    }
-    for(let key in b) {
-        (<U>result)[key] = b[key];
-    }
+const xmz = new Person();
 
-    return result;
+// 修改实例方法say
+xmz.say = function() {
+    return 'edit'
 }
+
+// 打印结果,检查是否成功修改实例方法
+console.log(xmz.say());
