@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>popup</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+    .box {
+        width: 220px;
+        height: 300px;
+        padding: 10px;
+    }
+    .title { margin: 10px 0; font-weight: bold; color: #999;}
+    .btn { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="title">这里是popup page</div>
+        <a id="open_background" href="#" class="btn btn-small btn-success">go to background page</a>
+        <div id="show-notification" class="btn btn-info">点我</div>
+        <a class="btn btn-info" href="https://www.python.org/" target="_blank">去学python</a>
+    </div>
+    <script src="./js/jquery-2.0.0.min.js"></script>
+    <script src="./js/popup.js"></script>
+</body>
+</html>

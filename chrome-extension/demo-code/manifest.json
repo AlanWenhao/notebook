@@ -1,0 +1,33 @@
+{
+    "manifest_version": 2,
+	"name": "demo",
+	"version": "1.0.0",
+	"description": "简单的Chrome扩展demo",
+	"icons": {
+        "16": "img/hy-logo.png",
+        "48": "img/hy-logo.png",
+        "128": "img/hy-logo.png"
+    },
+    "background": {
+		"page": "background.html"
+    },
+    "browser_action": {
+		"default_icon": "img/hy-logo.png",
+		"default_title": "悬浮显示的文字",
+		"default_popup": "popup.html"
+    },
+    "content_scripts": 
+	[
+		{
+            "js": ["js/jquery-2.0.0.min.js", "js/bootstrap.min.js", "content-script/inject.js"],
+            "css": ["css/bootstrap.min.css", "content-script/inject.css"],
+			"matches": ["https://www.python.org/*"]
+		}
+	],
+	"permissions": [	
+        "storage",	
+        "webRequest",	
+        "webRequestBlocking",	
+        "notifications"	
+    ]
+}
